@@ -12,7 +12,7 @@ login_form.addEventListener('submit', function (e) {
     }
 
     const http = new XMLHttpRequest();
-    const url = 'https://scrawlless.com/api/test';
+    const url = 'index.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
