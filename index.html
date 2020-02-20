@@ -8,22 +8,23 @@
 <body>
 	<div class="container">
 		<div class="form-container">
-			<form>
+			<form id="login-form">
 				<div class="input">
-					<label for="username">Username</label>
-					<input type="text" name="username" placeholder="Your UCID login" />
+					<label for="username">Username *</label>
+					<input type="text" name="username" placeholder="Your UCID login" required />
 				</div>
 
 				<div class="input">
-					<label for="password">Password</label>
-					<input type="password" name="password" placeholder="Your UCID login password" />
+					<label for="password">Password *</label>
+					<input type="password" name="password" placeholder="Your UCID login password" required />
 				</div>
 
-
-				<input type="submit" class="button" />
+				<button type="submit" id="submit-btn" class="button">Log In</button>
 			</form>
 		</div>
 	</div>
+
+	<script src="./assets/js/script.js"></script>
 </body>
 
 </html>
