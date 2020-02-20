@@ -18,9 +18,9 @@ function toggle_response(state, data = null) {
         response_block.innerHTML = html;
     } else {
         response_block.innerHTML =
-            `<span></span>
+            `<span>null</span>
             <br>
-            <span></span>`;
+            <span>null</span>`;
     }
 
 }
