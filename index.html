@@ -1,10 +1,40 @@
-<!-- NJIT default user homepage version 20070214 -->
 <html>
-	<head>
-		<title>Empty homepage</title>
-	</head>
-	<body>
-	<h1>Hello CS490 Class!!!</h1>
-	<h3> AFS is dope!</h3>
+
+<head>
+	<title>Testing Systems</title>
+	<link rel="icon" type="image/png" href="./favicon.ico">
+	<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+</head>
+
+<body>
+	<div class="container">
+		<div class="elements-container form-container">
+			<form id="login-form">
+				<div class="input">
+					<label for="username">Username *</label>
+					<input type="text" name="username" placeholder="Your UCID login" autocomplete="username" required />
+				</div>
+
+				<div class="input">
+					<label for="password">Password *</label>
+					<input type="password" name="password" placeholder="Your UCID login password"
+						autocomplete="current-password" required />
+				</div>
+
+				<button type="submit" id="submit-btn" class="button">Log In</button>
+			</form>
+		</div>
+
+		<div id="response-block" class="elements-container response-container" style="visibility: hidden;">
+			<span>null</span>
+			<br>
+			<span>null</span>
+		</div>
+	</div>
+
+	<div class="loading" id="loading" style="display: none;"></div>
+
+	<script src="./assets/js/script.js"></script>
 </body>
+
 </html>
