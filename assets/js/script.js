@@ -12,8 +12,9 @@ function toggle_response(state, data = null) {
 
     if (data) {
         var html = ``;
-        html += `<span>${data.database.message}</span>`;
-        html += `<span>${data.webnjit.message}</span>`;
+        html += `<span style="color: ${data.database.success ? "green" : "red"};">${data.database.message}</span>`;
+        html += `<br>`;
+        html += `<span style="color: ${data.webnjit.success ? "green" : "red"};">${data.webnjit.message}</span>`;
         response_block.innerHTML = html;
     }
 
