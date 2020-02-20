@@ -20,7 +20,8 @@ login_form.addEventListener('submit', function (e) {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(JSON.parse(http.responseText));
+            var result = JSON.parse(http.responseText)
+            console.log(result);
         }
     }
 
