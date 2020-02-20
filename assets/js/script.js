@@ -16,6 +16,11 @@ function toggle_response(state, data = null) {
         html += `<br>`;
         html += `<span style="color: ${data.webnjit.success ? "green" : "red"};">${data.webnjit.message}</span>`;
         response_block.innerHTML = html;
+    } else {
+        response_block.innerHTML =
+            `<span></span>
+            <br>
+            <span></span>`;
     }
 
 }
