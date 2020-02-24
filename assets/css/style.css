@@ -1,8 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-
 form, body, html {
     margin: 0px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
