@@ -1,0 +1,20 @@
+[
+    {
+        "full_name": "Dzmitry Kuzmitch",
+        "first_name": "Dzmitry",
+        "last_name": "Kuzmitch",
+        "email": "stundent@test.com",
+        "type": "0",
+        "type_string": "student",
+        "token": "stud_token"
+    },
+    {
+        "full_name": "Theodore Nicholson",
+        "first_name": "Theodore",
+        "last_name": "Nicholson",
+        "email": "teacher@test.com",
+        "type": "1",
+        "type_string": "teacher",
+        "token": "teach_token"
+    }
+]

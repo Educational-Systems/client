@@ -38,7 +38,15 @@ login_form.addEventListener('submit', function (e) {
         data[key] = value;
     }
 
-    const http = new XMLHttpRequest();
+    if(data.username == "teacher") {
+        window.location.href = window.location.href.replace("index", "teacher");
+        toggle_loading(false);
+    } else {
+        window.location.href = window.location.href.replace("index", "student");
+        toggle_loading(false);
+    }
+
+    /*const http = new XMLHttpRequest();
     const url = 'login.php';
 
     http.open("POST", url, true);
@@ -51,7 +59,7 @@ login_form.addEventListener('submit', function (e) {
             toggle_response(true, result);
             toggle_loading(false);
         }
-    }
+    }*/
 
     return false;
 });
