@@ -44,6 +44,7 @@ var current_user = {
 var current_exam = null;
 var current_question = null;
 var current_submissions = null;
+var current_submission = null;
 
 var new_exam = {
     "name": "",
@@ -71,6 +72,8 @@ var new_submission = {
 var new_sub_question = {
     "questionID": null,
     "solution": "",
+    "result1": "",
+    "result2": "",
     "grade": 0,
     "comments": ""
 }
@@ -120,24 +123,30 @@ var questions_list = [
         "name": "Q1",
         "description": "This is Question 1: addition.",
         "task": "Created function 'add' which will output the sum of two numbers.",
-        "input": "10, 20",
-        "output": "30",
+        "input1": "10, 20",
+        "output1": "30",
+        "input2": "-1, 2",
+        "output2": "1",
         "ID": 1
     },
     {
         "name": "Q2",
         "description": "This is Question 2: multiplication.",
         "task": "Created function 'mult' which will output the multiplication of two numbers.",
-        "input": "2, 5",
-        "output": "10",
+        "input1": "2, 5",
+        "output1": "10",
+        "input2": "3, 7",
+        "output2": "21",
         "ID": 2
     },
     {
         "name": "Q3",
         "description": "This is Question 3: power.",
         "task": "Created function 'pow' which will output number to the power of 2.",
-        "input": "4",
-        "output": "16",
+        "input1": "4",
+        "output1": "16",
+        "input2": "4",
+        "output2": "16",
         "ID": 3
     }
 ]
@@ -171,6 +180,8 @@ var submissions_list = [
                 {
                     "questionID": 1,
                     "solution": "def add(a,b): return a + b",
+                    "result1": "30",
+                    "result2": "1",
                     "grade": 20,
                     "comments": "Task well done!"
                 }
@@ -188,6 +199,8 @@ var submissions_list = [
                 {
                     "questionID": 1,
                     "solution": "",
+                    "result1": "",
+                    "result2": "",
                     "grade": 0,
                     "comments": ""
                 }
@@ -207,12 +220,16 @@ var submissions_list = [
                 {
                     "questionID": 2,
                     "solution": "",
+                    "result1": "",
+                    "result2": "",
                     "grade": 0,
                     "comments": ""
                 },
                 {
                     "questionID": 3,
                     "solution": "",
+                    "result1": "",
+                    "result2": "",
                     "grade": 0,
                     "comments": ""
                 }
@@ -356,16 +373,35 @@ function exam_submissions_view() {
 function exam_submission_view() {
     return `
     <div>
-        <h2>Exam Submissions</h2>
+        <h2>Exam Submission</h2>
         <div class="act-container">
             <a onclick='go_back()'>Go Back</a>
         </div>
+
+        <br>
         <div>
-            <h3>${current_exam.name}</h3>
+            <h3>${current_submission.studentName} | ${current_exam.name}</h3>
+            <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
             <p>${current_exam.description}</p>
         </div>
-        <div class="s-container">
-            ${get_submissions()}
+        <br>
+
+        <div class="submission-container">
+            ${get_submitted_questions()}
+        </div>
+        
+        <div class="input">
+            <label for="final_grade">Final Grade:</label>
+            <input type="text" name="final_grade" placeholder="Type Final Grade" value="${current_submission ? current_submission.grade : ""}" onchange="change_submission_field('grade', this.value)" />
+        </div>
+        <div class="input">
+            <label for="submission_comments">Comments:</label>
+            <input type="text" name="submission_comments" placeholder="Type Submission Comments" value="${current_submission ? current_submission.comments : ""}" onchange="change_submission_field('comments', this.value)" />
+        </div>
+
+        <div class="form-buttons">
+            <button class="button" onclick='save_submission()'>Grade Submission</button>
+            <button class="button" onclick='go_back()'>Cancel</button>
         </div>
     </div>
     `;
@@ -488,12 +524,20 @@ function get_question_data() {
                     <input type="text" name="question_task" placeholder="Type Question Task" value="${current_question ? current_question.task : ""}" onchange="change_question_field('task', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_input">Input</label>
-                    <input type="text" name="question_input" placeholder="Type Question Input" value="${current_question ? current_question.input : ""}" onchange="change_question_field('input', this.value)" />
+                    <label for="question_input1">Input 1</label>
+                    <input type="text" name="question_input1" placeholder="Type Question Input 1" value="${current_question ? current_question.input1 : ""}" onchange="change_question_field('input1', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_output">Output</label>
-                    <input type="text" name="question_output" placeholder="Type Question Output" value="${current_question ? current_question.output : ""}" onchange="change_question_field('output', this.value)" />
+                    <label for="question_output1">Output 1</label>
+                    <input type="text" name="question_output1" placeholder="Type Question Output 1" value="${current_question ? current_question.output1 : ""}" onchange="change_question_field('output1', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_input2">Input 2</label>
+                    <input type="text" name="question_input2" placeholder="Type Question Input 2" value="${current_question ? current_question.input2 : ""}" onchange="change_question_field('input2', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_output2">Output 2</label>
+                    <input type="text" name="question_output2" placeholder="Type Question Output 2" value="${current_question ? current_question.output2 : ""}" onchange="change_question_field('output2', this.value)" />
                 </div>
 
                 <br>
@@ -542,6 +586,28 @@ function get_students() {
             <div class="stud-selection">
                 <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_student(this.checked, ${temp_student.ID}, '${temp_student.name}')">
                 <label><b>${temp_student.name}</b></label>
+            </div>
+        `;
+    }
+
+    return result;
+}
+
+function get_submitted_questions() {
+    var result = "<h4>Questions:</h4>";
+
+    for (var i = 0; i < current_submission.questions.length; i++) {
+        result += `
+            <div class="s-block">
+                <div class="s-header">
+                    <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
+                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final.</p>
+                    <p>${current_submissions[i].comments}</p>
+                </div>
+                <div class="s-actions">
+                    <a onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
+                </div>
+                <br>
             </div>
         `;
     }
@@ -616,12 +682,20 @@ function change_question_field(field, value) {
     current_question[field] = value;
 }
 
+function change_submission_field(field, value) {
+    current_submission[field] = value;
+}
+
 function save_exam() {
     console.log(current_exam);
 }
 
 function save_question() {
     console.log(current_question);
+}
+
+function save_submission() {
+    console.log(current_submission);
 }
 
 /* <------------ Logic Functions <------------ */
@@ -640,6 +714,7 @@ function navigate(place, data = null) {
         current_exam = null;
         current_question = null;
         current_submissions = null;
+        current_submission = null;
     }
 
 
@@ -678,8 +753,13 @@ function navigate(place, data = null) {
             break;
         }
         case "exam_submissions": {
-            current_exam = exams_list[data];
-            current_submissions = submissions_list[data];
+            current_submission = null;
+
+            if (data != null) {
+                current_exam = exams_list[data];
+                current_submissions = submissions_list[data];
+            }
+
             container.innerHTML = exam_submissions_view();
             break;
         }
