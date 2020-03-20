@@ -30,7 +30,6 @@ function copy(obj1) {
 }
 
 /* ------------> State Variables ------------> */
-
 var current_user = {
     "full_name": "Theodore Nicholson",
     "first_name": "Theodore",
@@ -751,29 +750,128 @@ function navigate(place, data = null) {
         current_submission = null;
     }
 
+    //current_user, exams_list, questions_list, students_list, submissions_list
 
     switch (place) {
         case "home": {
             nav_history = ["home"];
-            container.innerHTML = home_view();
+
+            toggle_loading(true);
+
+            var data = { token: localStorage.getItem("token") };
+
+            const http = new XMLHttpRequest();
+            const url = 'get_user.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    current_user = result;
+
+                    toggle_loading(false);
+                    container.innerHTML = home_view();
+                }
+            }
+
             break;
         }
         case "exams": {
-            container.innerHTML = exams_view();
+            toggle_loading(true);
+
+            var data = { token: localStorage.getItem("token") };
+
+            const http = new XMLHttpRequest();
+            const url = 'get_exams.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    exams_list = result;
+
+                    toggle_loading(false);
+                    container.innerHTML = exams_view();
+                }
+            }
+
             break;
         }
         case "questions": {
-            container.innerHTML = questions_view();
+            toggle_loading(true);
+
+            var data = { token: localStorage.getItem("token") };
+
+            const http = new XMLHttpRequest();
+            const url = 'get_questions.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    questions_list = result;
+
+                    toggle_loading(false);
+                    container.innerHTML = questions_view();
+                }
+            }
             break;
         }
         case "exam_create": {
-            current_exam = copy(new_exam);
-            container.innerHTML = exam_create_view();
+            toggle_loading(true);
+
+            var data = { token: localStorage.getItem("token") };
+
+            const http = new XMLHttpRequest();
+            const url = 'get_questions.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    questions_list = result;
+
+                    toggle_loading(false);
+                    current_exam = copy(new_exam);
+                    container.innerHTML = exam_create_view();
+                }
+            }
             break;
         }
         case "exam_edit": {
-            current_exam = exams_list[data];
-            container.innerHTML = exam_edit_view();
+            toggle_loading(true);
+
+            var data = { token: localStorage.getItem("token") };
+
+            const http = new XMLHttpRequest();
+            const url = 'get_questions.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    questions_list = result;
+
+                    toggle_loading(false);
+                    current_exam = exams_list[data];
+                    container.innerHTML = exam_edit_view();
+                }
+            }
             break;
         }
         case "question_create": {
@@ -787,14 +885,47 @@ function navigate(place, data = null) {
             break;
         }
         case "exam_submissions": {
-            current_submission = null;
+            toggle_loading(true);
 
-            if (data != null) {
-                current_exam = exams_list[data];
-                current_submissions = submissions_list[data];
+            var data = { token: localStorage.getItem("token"), examID: data };
+
+            const http = new XMLHttpRequest();
+            var url = 'get_exam_submissions.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    submissions_list = result;
+
+                    data = { token: localStorage.getItem("token") };
+                    url = 'get_students.php';
+
+                    http.open("POST", url, true);
+                    http.setRequestHeader("Content-type", "application/json");
+                    http.send(JSON.stringify(data));
+
+                    http.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var result = JSON.parse(http.responseText);
+                            students_list = result;
+
+                            toggle_loading(false);
+                            current_submission = null;
+
+                            if (data != null) {
+                                current_exam = exams_list[data];
+                                current_submissions = submissions_list[data];
+                            }
+
+                            container.innerHTML = exam_submissions_view();
+                        }
+                    }
+                }
             }
-
-            container.innerHTML = exam_submissions_view();
             break;
         }
         case "exam_submission": {
