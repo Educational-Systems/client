@@ -1,0 +1,12 @@
+{
+    "studentName": "Dzmitry",
+    "examID": 1,
+    "studentID": 1,
+    "ID": 1,
+    "questions": [
+        {
+            "solution": "def add(a,b): return a + b",
+            "ID": 1
+        }
+    ]
+}

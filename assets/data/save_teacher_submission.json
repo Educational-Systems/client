@@ -1,0 +1,14 @@
+{
+    "examID": 1,
+    "studentID": 1,
+    "grade": 20,
+    "comments": "Well done!",
+    "ID": 1,
+    "questions": [
+        {
+            "questionID": 1,
+            "grade": 20,
+            "comments": "Task well done!"
+        }
+    ]
+}
