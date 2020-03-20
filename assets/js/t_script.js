@@ -148,16 +148,6 @@ var questions_data_list = [
     }
 ]
 
-function get_question(ID) {
-    for (var i = 0; i < questions_list.length; i++) {
-        if (questions_list[i].ID == ID) {
-            return questions_list[i];
-        }
-    }
-
-    return null;
-}
-
 function get_question_status(ID) {
     for (var i = 0; i < current_exam.questions.length; i++) {
         if (current_exam.questions[i].questionID == ID) {
