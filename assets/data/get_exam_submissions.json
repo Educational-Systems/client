@@ -1,76 +1,42 @@
 [
-    [
-        {
-            "studentName": "Dzmitry",
-            "studentID": 1,
-            "status": 2,
-            "autoGrade": 20,
-            "grade": 20,
-            "comments": "Well done!",
-            "ID": 1,
-            "questions": [
-                {
-                    "questionID": 1,
-                    "solution": "def add(a,b): return a + b",
-                    "result1": "30",
-                    "result2": "1",
-                    "autoGrade": 20,
-                    "grade": 20,
-                    "comments": "Task well done!"
-                }
-            ]
-        },
-        {
-            "studentName": "Noah",
-            "studentID": 2,
-            "status": 0,
-            "autoGrade": 0,
-            "grade": 0,
-            "comments": "",
-            "ID": 2,
-            "questions": [
-                {
-                    "questionID": 1,
-                    "solution": "",
-                    "result1": "",
-                    "result2": "",
-                    "autoGrade": 0,
-                    "grade": 0,
-                    "comments": ""
-                }
-            ]
-        }
-    ],
-    [
-        {
-            "studentName": "Noah",
-            "studentID": 2,
-            "status": 0,
-            "autoGrade": 0,
-            "grade": 0,
-            "comments": "",
-            "ID": 2,
-            "questions": [
-                {
-                    "questionID": 2,
-                    "solution": "",
-                    "result1": "",
-                    "result2": "",
-                    "autoGrade": 0,
-                    "grade": 0,
-                    "comments": ""
-                },
-                {
-                    "questionID": 3,
-                    "solution": "",
-                    "result1": "",
-                    "result2": "",
-                    "autoGrade": 0,
-                    "grade": 0,
-                    "comments": ""
-                }
-            ]
-        }
-    ],
-    []
+    {
+        "studentName": "Dzmitry",
+        "studentID": 1,
+        "status": 2,
+        "autoGrade": 20,
+        "grade": 20,
+        "comments": "Well done!",
+        "ID": 1,
+        "questions": [
+            {
+                "questionID": 1,
+                "solution": "def add(a,b): return a + b",
+                "result1": "30",
+                "result2": "1",
+                "autoGrade": 20,
+                "grade": 20,
+                "comments": "Task well done!"
+            }
+        ]
+    },
+    {
+        "studentName": "Noah",
+        "studentID": 2,
+        "status": 0,
+        "autoGrade": 0,
+        "grade": 0,
+        "comments": "",
+        "ID": 2,
+        "questions": [
+            {
+                "questionID": 1,
+                "solution": "",
+                "result1": "",
+                "result2": "",
+                "autoGrade": 0,
+                "grade": 0,
+                "comments": ""
+            }
+        ]
+    }
 ]
