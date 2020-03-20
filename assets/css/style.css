@@ -104,3 +104,12 @@ a {
     margin-right: 10px;
 }
 
+#container .input {
+    width: 200px;
+}
+
+.q-selector {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+

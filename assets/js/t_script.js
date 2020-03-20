@@ -160,11 +160,11 @@ function get_question(ID) {
 function get_question_status(ID) {
     for (var i = 0; i < current_exam.questions.length; i++) {
         if (current_exam.questions[i].questionID == ID) {
-            return true;
+            return current_exam.questions[i];
         }
     }
 
-    return false;
+    return null;
 }
 
 /* <------------ State Variables <------------ */
@@ -313,34 +313,37 @@ function get_questions() {
 }
 
 function get_exam_data() {
-    console.log(current_exam);
     return `
-        <div>
-            <form id="exam-data-form">
+            <div>
+                <br>
+                <h4>Exam Information:</h4>
+
                 <div class="input">
                     <label for="exam_name">Exam Name *</label>
-                    <input type="text" name="exam_name" placeholder="Type Exam Name" autocomplete="exam_name" value="${current_exam ? current_exam.name : ""}" required />
+                    <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
                 </div>
                 <div class="input">
                     <label for="exam_description">Exam Description *</label>
-                    <input name="exam_description" placeholder="Type Exam Description" autocomplete="exam_description" value="${current_exam ? current_exam.description : ""}" required />
+                    <input name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
                 </div>
-                ${get_questions_selector()}
+
+                <br>
+
+                <div class="q-selector" id="questions_list">
+                    ${get_questions_selector()}
+                </div>                
 
                 <div class="form-buttons">
-                    <button type="submit" id="exam-submit-btn" class="button">Save Exam</button>
-                    <button id="cancel" class="button" onclick='go_back()'>Cancel</button>
+                    <button class="button" onclick='save_exam()'>Save Exam</button>
+                    <button class="button" onclick='go_back()'>Cancel</button>
                 </div>
-            </form>
-        </div>
+            </div>
     `;
 }
 
 function get_question_data() {
-    console.log(current_question);
     return `
-        <div>
-            <form id="question-data-form">
+            <div>
                 <div class="input">
                     <label for="question_name">Question Name *</label>
                     <input type="text" name="question_name" placeholder="Type Question Name" autocomplete="question_name" value="${current_question ? current_question.name : ""}" required />
@@ -352,39 +355,80 @@ function get_question_data() {
 
 
                 <div class="form-buttons">
-                    <button type="submit" id="question-submit-btn" class="button">Save Question</button>
-                    <button id="cancel" class="button" onclick='go_back()'>Cancel</button>
+                    <button class="button">Save Question</button>
+                    <button class="button" onclick='go_back()'>Cancel</button>
                 </div>
-            </form>
-        </div>
+            </div>
     `;
 }
 
 function get_questions_selector() {
-    var result = `
-        <div class="q-selector">
-    `;
+    var result = "<h4>Exam Questions:</h4>";
 
     for (var i = 0; i < questions_list.length; i++) {
         var temp_question = questions_list[i];
-        var is_applied = get_question_status(temp_question.ID);
+        var temp_status = get_question_status(temp_question.ID);
+        var is_applied = temp_status ? true : false;
 
         result += `
             <div class="q-selection">
-                <input type="checkbox" id="q_applied_${temp_question.ID}" ${is_applied ? "checked" : ""}>
-                <label for="q_applied_${temp_question.ID}"><b>${temp_question.name}</b></label>
+                <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_question(this.checked, ${temp_question.ID})">
+                <label><b>${temp_question.name}</b></label>
                 <p>${temp_question.description}</p>
-                <input type="text" id="q_points_${temp_question.ID}" ${!is_applied ? "style='display: none;'" : ""}>
+                
+                <div class="input">
+                    <input type="number" step="1" placeholder="Total Points" onchange="change_points(this.value, ${temp_question.ID})" ${!is_applied ? "style='display: none;'" : ""} value="${temp_status ? temp_status.points : ""}" required />
+                </div>
             </div>
         `;
     }
 
-    return result + `             
-        </div>
-    `;
+    return result;
 }
 
 /* <------------ Helper Functions <------------ */
+
+
+
+
+/* ------------> Logic Functions ------------> */
+
+function add_question(value, ID) {
+    if (value) {
+        current_exam.questions.push({
+            questionID: ID,
+            points: 0
+        });
+    } else {
+        for (var i = 0; i < current_exam.questions.length; i++) {
+            if (current_exam.questions[i].questionID == ID) {
+                current_exam.questions.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    document.getElementById("questions_list").innerHTML = get_questions_selector();
+}
+
+function change_points(value, ID) {
+    for (var i = 0; i < current_exam.questions.length; i++) {
+        if (current_exam.questions[i].questionID == ID) {
+            current_exam.questions[i].points = Number(value);
+            break;
+        }
+    }
+}
+
+function change_exam_field(field, value) {
+    current_exam[field] = value;
+}
+
+function save_exam() {
+    console.log(current_exam);
+}
+
+/* <------------ Logic Functions <------------ */
 
 
 
@@ -404,9 +448,7 @@ function navigate(place, data = null) {
         }
         case "exams": {
             current_exam = null;
-            current_exam_data = null;
             current_question = null;
-            current_question_data = null;
             container.innerHTML = exams_view();
             break;
         }
@@ -423,43 +465,31 @@ function navigate(place, data = null) {
             break;
         }
         case "exam_create": {
+            current_exam = null;
+            current_question = null;
             current_exam = copy(new_exam);
             container.innerHTML = exam_create_view();
-
-            document.getElementById("cancel").addEventListener("click", function (event) {
-                event.preventDefault()
-                return false;
-            });
             break;
         }
         case "exam_edit": {
+            current_exam = null;
+            current_question = null;
             current_exam = merge(exams_list[data], exams_data_list[data]);
             container.innerHTML = exam_edit_view();
-
-            document.getElementById("cancel").addEventListener("click", function (event) {
-                event.preventDefault()
-                return false;
-            });
             break;
         }
         case "question_create": {
+            current_exam = null;
+            current_question = null;
             current_question = copy(new_question);
             container.innerHTML = question_create_view();
-
-            document.getElementById("cancel").addEventListener("click", function (event) {
-                event.preventDefault()
-                return false;
-            });
             break;
         }
         case "question_edit": {
-            current_question = merge(questions_list[data], questions_data_list[data]);
+            current_exam = null;
+            current_question = null;
+            current_question = questions_list[data];
             container.innerHTML = question_edit_view();
-
-            document.getElementById("cancel").addEventListener("click", function (event) {
-                event.preventDefault()
-                return false;
-            });
             break;
         }
     }
