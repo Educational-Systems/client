@@ -47,7 +47,7 @@ login_form.addEventListener('submit', function (e) {
     }
 
     /*const http = new XMLHttpRequest();
-    const url = 'login.php';
+    const url = 'api/login.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
