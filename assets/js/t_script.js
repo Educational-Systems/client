@@ -42,13 +42,21 @@ var current_user = {
 }
 
 var current_exam = null;
-var current_question = null;
 
 var new_exam = {
     "name": "",
     "description": "",
-    "ID": null,
     "questions": []
+}
+
+var current_question = null;
+
+var new_question = {
+    "name": "",
+    "description": "",
+    "task": "",
+    "input": "",
+    "output": ""
 }
 
 var exams_list = [
@@ -87,63 +95,56 @@ var exams_data_list = [
             {
                 "questionID": 3,
                 "points": 10
-            },
-            {
-                "questionID": 4,
-                "points": 20
-            },
-            {
-                "questionID": 5,
-                "points": 20
             }
         ]
     },
     {
         "questions": [
             {
-                "questionID": 6,
-                "points": 40
+                "questionID": 2,
+                "points": 20
+            },
+            {
+                "questionID": 3,
+                "points": 10
             }
         ]
     }
 ]
 
-var new_question = {
-    "name": "",
-    "description": "",
-    "ID": null
-}
-
 var questions_list = [
     {
-        "name": "Exam 1 Q1",
-        "description": "This is Question 1 of the Exam 1",
+        "name": "Q1",
+        "description": "This is Question 1: addition.",
+        "task": "Created function 'add' which will output the sum of two numbers.",
         "ID": 1
     },
     {
-        "name": "Exam 1 Q2",
-        "description": "This is Question 2 of the Exam 1",
+        "name": "Q2",
+        "description": "This is Question 2: multiplication.",
+        "task": "Created function 'mult' which will output the multiplication of two numbers.",
         "ID": 2
     },
     {
-        "name": "Exam 2 Q1",
-        "description": "This is Question 1 of the Exam 2",
+        "name": "Q3",
+        "description": "This is Question 3: power.",
+        "task": "Created function 'pow' which will output number to the power of 2.",
         "ID": 3
+    }
+]
+
+var questions_data_list = [
+    {
+        "input": "10, 20",
+        "output": "30"
     },
     {
-        "name": "Exam 2 Q2",
-        "description": "This is Question 2 of the Exam 2",
-        "ID": 4
+        "input": "2, 5",
+        "output": "10"
     },
     {
-        "name": "Exam 2 Q3",
-        "description": "This is Question 3 of the Exam 2",
-        "ID": 5
-    },
-    {
-        "name": "Exam 3 Q1",
-        "description": "This is Question 1 of the Exam 3",
-        "ID": 6
+        "input": "4",
+        "output": "16"
     }
 ]
 
@@ -319,12 +320,12 @@ function get_exam_data() {
                 <h4>Exam Information:</h4>
 
                 <div class="input">
-                    <label for="exam_name">Exam Name *</label>
+                    <label for="exam_name">Exam Name</label>
                     <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="exam_description">Exam Description *</label>
-                    <input name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
+                    <label for="exam_description">Exam Description</label>
+                    <input type="text" name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
                 </div>
 
                 <br>
@@ -345,12 +346,24 @@ function get_question_data() {
     return `
             <div>
                 <div class="input">
-                    <label for="question_name">Question Name *</label>
-                    <input type="text" name="question_name" placeholder="Type Question Name" autocomplete="question_name" value="${current_question ? current_question.name : ""}" required />
+                    <label for="question_name">Question Name</label>
+                    <input type="text" name="question_name" placeholder="Type Question Name" value="${current_question ? current_question.name : ""}" onchange="change_question_field('name', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_description">Question Description *</label>
-                    <input name="question_description" placeholder="Type Question Description" autocomplete="question_description" value="${current_question ? current_question.description : ""}" required />
+                    <label for="question_description">Question Description</label>
+                    <input type="text" name="question_description" placeholder="Type Question Description" value="${current_question ? current_question.description : ""}" onchange="change_question_field('description', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_task">Question Task</label>
+                    <input type="text" name="question_task" placeholder="Type Question Task" value="${current_question ? current_question.task : ""}" onchange="change_question_field('task', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_input">Question Input</label>
+                    <input type="text" name="question_input" placeholder="Type Question Input" value="${current_question ? current_question.input : ""}" onchange="change_question_field('input', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_output">Question Output</label>
+                    <input type="text" name="question_output" placeholder="Type Question Output" value="${current_question ? current_question.output : ""}" onchange="change_question_field('output', this.value)" />
                 </div>
 
 
@@ -424,8 +437,16 @@ function change_exam_field(field, value) {
     current_exam[field] = value;
 }
 
+function change_question_field(field, value) {
+    current_question[field] = value;
+}
+
 function save_exam() {
     console.log(current_exam);
+}
+
+function save_question() {
+    console.log(current_question);
 }
 
 /* <------------ Logic Functions <------------ */
@@ -440,6 +461,9 @@ var nav_history = [];
 function navigate(place, data = null) {
     nav_history.push(place);
 
+    current_exam = null;
+    current_question = null;
+
     switch (place) {
         case "home": {
             nav_history = ["home"];
@@ -447,48 +471,35 @@ function navigate(place, data = null) {
             break;
         }
         case "exams": {
-            current_exam = null;
-            current_question = null;
             container.innerHTML = exams_view();
             break;
         }
         case "questions": {
-            current_exam = null;
-            current_question = null;
             container.innerHTML = questions_view();
             break;
         }
         case "exam_submissions": {
             current_exam = merge(exams_list[data], exams_data_list[data]);
             container.innerHTML = exam_submissions_view();
-
             break;
         }
         case "exam_create": {
-            current_exam = null;
-            current_question = null;
             current_exam = copy(new_exam);
             container.innerHTML = exam_create_view();
             break;
         }
         case "exam_edit": {
-            current_exam = null;
-            current_question = null;
             current_exam = merge(exams_list[data], exams_data_list[data]);
             container.innerHTML = exam_edit_view();
             break;
         }
         case "question_create": {
-            current_exam = null;
-            current_question = null;
             current_question = copy(new_question);
             container.innerHTML = question_create_view();
             break;
         }
         case "question_edit": {
-            current_exam = null;
-            current_question = null;
-            current_question = questions_list[data];
+            current_question = merge(questions_list[data], questions_data_list[data]);
             container.innerHTML = question_edit_view();
             break;
         }
