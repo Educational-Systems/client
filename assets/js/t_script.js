@@ -750,8 +750,6 @@ function navigate(place, data = null) {
         current_submission = null;
     }
 
-    //current_user, exams_list, questions_list, students_list, submissions_list
-
     switch (place) {
         case "home": {
             nav_history = ["home"];
