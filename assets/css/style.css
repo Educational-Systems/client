@@ -3,10 +3,9 @@ form, body, html {
     font-family: 'Arial', sans-serif;
 }
 
-body {
-    background-image: url(../img/back.jpg);
-    background-size: cover;
-    background-position: center;
+a {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .loading {
