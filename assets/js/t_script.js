@@ -59,6 +59,24 @@ var new_question = {
     "output": ""
 }
 
+var current_submissions = null;
+
+var new_submission = {
+    "studentID": null,
+    "status": 0,
+    "autoGrade": 0,
+    "grade": 0,
+    "comments": "",
+    "questions": []
+}
+
+var new_sub_question = {
+    "questionID": null,
+    "solution": "",
+    "grade": 0,
+    "comments": ""
+}
+
 var exams_list = [
     {
         "name": "Exam 1",
@@ -82,10 +100,6 @@ var exams_data_list = [
         "questions": [
             {
                 "questionID": 1,
-                "points": 10
-            },
-            {
-                "questionID": 2,
                 "points": 20
             }
         ]
@@ -93,6 +107,10 @@ var exams_data_list = [
     {
         "questions": [
             {
+                "questionID": 2,
+                "points": 10
+            },
+            {
                 "questionID": 3,
                 "points": 10
             }
@@ -103,10 +121,6 @@ var exams_data_list = [
             {
                 "questionID": 2,
                 "points": 20
-            },
-            {
-                "questionID": 3,
-                "points": 10
             }
         ]
     }
@@ -148,6 +162,86 @@ var questions_data_list = [
     }
 ]
 
+var students_list = [
+    {
+        "name": "Dzmitry",
+        "ID": 1
+    },
+    {
+        "name": "Noah",
+        "ID": 2
+    },
+    {
+        "name": "David",
+        "ID": 3
+    }
+]
+
+var submissions_list = [
+    [
+        {
+            "studentName": "Dzmitry",
+            "studentID": 1,
+            "status": 2,
+            "autoGrade": 20,
+            "grade": 20,
+            "comments": "Well done!",
+            "ID": 1,
+            "questions": [
+                {
+                    "questionID": 1,
+                    "solution": "def add(a,b): return a + b",
+                    "grade": 20,
+                    "comments": "Task well done!"
+                }
+            ]
+        },
+        {
+            "studentName": "Noah",
+            "studentID": 2,
+            "status": 0,
+            "autoGrade": 0,
+            "grade": 0,
+            "comments": "",
+            "ID": 2,
+            "questions": [
+                {
+                    "questionID": 1,
+                    "solution": "",
+                    "grade": 0,
+                    "comments": ""
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "studentName": "Noah",
+            "studentID": 2,
+            "status": 0,
+            "autoGrade": 0,
+            "grade": 0,
+            "comments": "",
+            "ID": 2,
+            "questions": [
+                {
+                    "questionID": 2,
+                    "solution": "",
+                    "grade": 0,
+                    "comments": ""
+                },
+                {
+                    "questionID": 3,
+                    "solution": "",
+                    "grade": 0,
+                    "comments": ""
+                }
+            ]
+        }
+    ],
+    []
+]
+
 function get_question_status(ID) {
     for (var i = 0; i < current_exam.questions.length; i++) {
         if (current_exam.questions[i].questionID == ID) {
@@ -156,6 +250,16 @@ function get_question_status(ID) {
     }
 
     return null;
+}
+
+function get_assignment_status(ID) {
+    for (var i = 0; i < current_submissions.length; i++) {
+        if (current_submissions[i].studentID == ID) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* <------------ State Variables <------------ */
@@ -210,17 +314,6 @@ function questions_view() {
     `;
 }
 
-function exam_submissions_view() {
-    return `
-    <div>
-        <h2>Exam Submissions</h2>
-        <div class="act-container">
-            <a onclick='go_back()'>Go Back</a>
-        </div>
-    </div>
-    `;
-}
-
 function exam_create_view() {
     return `
     <div>
@@ -257,12 +350,96 @@ function question_edit_view() {
     `;
 }
 
+function exam_submissions_view() {
+    return `
+    <div>
+        <h2>Exam Submissions</h2>
+        <div class="act-container">
+            <a onclick='go_back()'>Go Back</a>
+        </div>
+        <br>
+        <div>
+            <h3>${current_exam.name}</h3>
+            <p>${current_exam.description}</p>
+        </div>
+        <br>
+        <div id="submissions_container" class="s-container">
+            ${get_submissions()}
+        </div>
+        <div class="stud-list"> 
+            ${get_students()}
+        </div>
+    </div>
+    `;
+}
+
+function exam_submission_view() {
+    return `
+    <div>
+        <h2>Exam Submissions</h2>
+        <div class="act-container">
+            <a onclick='go_back()'>Go Back</a>
+        </div>
+        <div>
+            <h3>${current_exam.name}</h3>
+            <p>${current_exam.description}</p>
+        </div>
+        <div class="s-container">
+            ${get_submissions()}
+        </div>
+    </div>
+    `;
+}
+
 /* <------------ Views Functions <------------ */
 
 
 
 
 /* ------------> Helper Functions ------------> */
+
+function get_submissions() {
+    var result = "<h4>Submissions:</h4>";
+
+    for (var i = 0; i < current_submissions.length; i++) {
+        result += `
+            <div class="s-block">
+                <div class="s-header">
+                    <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
+                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final.</p>
+                    <p>${current_submissions[i].comments}</p>
+                </div>
+                <div class="s-actions">
+                    <a onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
+                </div>
+                <br>
+            </div>
+        `;
+    }
+
+    return result;
+}
+
+function get_students() {
+    var result = "";
+
+    var result = "<h4>Assign to Students:</h4>";
+
+    for (var i = 0; i < students_list.length; i++) {
+        var temp_student = students_list[i];
+        var temp_status = get_assignment_status(temp_student.ID);
+        var is_applied = temp_status ? true : false;
+
+        result += `
+            <div class="stud-selection">
+                <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_student(this.checked, ${temp_student.ID}, '${temp_student.name}')">
+                <label><b>${temp_student.name}</b></label>
+            </div>
+        `;
+    }
+
+    return result;
+}
 
 function get_exams() {
     var result = "";
@@ -399,6 +576,32 @@ function get_questions_selector() {
 
 /* ------------> Logic Functions ------------> */
 
+function add_student(value, ID, name) {
+    if (value) {
+        current_submissions.push({
+            ...new_submission,
+            studentName: name,
+            studentID: ID,
+            questions: current_exam.questions.map(x => {
+                return {
+                    ...new_sub_question,
+                    questionID: x.ID
+                }
+            })
+        });
+    } else {
+        for (var i = 0; i < current_submissions.length; i++) {
+            if (current_submissions[i].studentID == ID) {
+                current_submissions.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    console.log(current_submissions);
+    document.getElementById("submissions_container").innerHTML = get_submissions();
+}
+
 function add_question(value, ID) {
     if (value) {
         current_exam.questions.push({
@@ -454,8 +657,12 @@ var nav_history = [];
 function navigate(place, data = null) {
     nav_history.push(place);
 
-    current_exam = null;
-    current_question = null;
+    if (place != "exam_submission" && place != "exam_submissions") {
+        current_exam = null;
+        current_question = null;
+        current_submissions = null;
+    }
+
 
     switch (place) {
         case "home": {
@@ -473,7 +680,13 @@ function navigate(place, data = null) {
         }
         case "exam_submissions": {
             current_exam = merge(exams_list[data], exams_data_list[data]);
+            current_submissions = submissions_list[data];
             container.innerHTML = exam_submissions_view();
+            break;
+        }
+        case "exam_submission": {
+            current_submission = current_submissions[data];
+            container.innerHTML = exam_submission_view();
             break;
         }
         case "exam_create": {
