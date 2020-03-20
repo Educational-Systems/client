@@ -320,11 +320,11 @@ function get_exam_data() {
                 <h4>Exam Information:</h4>
 
                 <div class="input">
-                    <label for="exam_name">Exam Name</label>
+                    <label for="exam_name">Name</label>
                     <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="exam_description">Exam Description</label>
+                    <label for="exam_description">Description</label>
                     <input type="text" name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
                 </div>
 
@@ -345,30 +345,33 @@ function get_exam_data() {
 function get_question_data() {
     return `
             <div>
+                <br>
+                <h4>Question Information:</h4>
                 <div class="input">
-                    <label for="question_name">Question Name</label>
+                    <label for="question_name">Name</label>
                     <input type="text" name="question_name" placeholder="Type Question Name" value="${current_question ? current_question.name : ""}" onchange="change_question_field('name', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_description">Question Description</label>
+                    <label for="question_description">Description</label>
                     <input type="text" name="question_description" placeholder="Type Question Description" value="${current_question ? current_question.description : ""}" onchange="change_question_field('description', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_task">Question Task</label>
+                    <label for="question_task">Task</label>
                     <input type="text" name="question_task" placeholder="Type Question Task" value="${current_question ? current_question.task : ""}" onchange="change_question_field('task', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_input">Question Input</label>
+                    <label for="question_input">Input</label>
                     <input type="text" name="question_input" placeholder="Type Question Input" value="${current_question ? current_question.input : ""}" onchange="change_question_field('input', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_output">Question Output</label>
+                    <label for="question_output">Output</label>
                     <input type="text" name="question_output" placeholder="Type Question Output" value="${current_question ? current_question.output : ""}" onchange="change_question_field('output', this.value)" />
                 </div>
 
+                <br>
 
                 <div class="form-buttons">
-                    <button class="button">Save Question</button>
+                    <button class="button" onclick='save_question()'>Save Question</button>
                     <button class="button" onclick='go_back()'>Cancel</button>
                 </div>
             </div>
