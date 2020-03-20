@@ -74,6 +74,7 @@ var new_sub_question = {
     "solution": "",
     "result1": "",
     "result2": "",
+    "autoGrade": 0,
     "grade": 0,
     "comments": ""
 }
@@ -182,6 +183,7 @@ var submissions_list = [
                     "solution": "def add(a,b): return a + b",
                     "result1": "30",
                     "result2": "1",
+                    "autoGrade": 20,
                     "grade": 20,
                     "comments": "Task well done!"
                 }
@@ -201,6 +203,7 @@ var submissions_list = [
                     "solution": "",
                     "result1": "",
                     "result2": "",
+                    "autoGrade": 0,
                     "grade": 0,
                     "comments": ""
                 }
@@ -222,6 +225,7 @@ var submissions_list = [
                     "solution": "",
                     "result1": "",
                     "result2": "",
+                    "autoGrade": 0,
                     "grade": 0,
                     "comments": ""
                 },
@@ -230,6 +234,7 @@ var submissions_list = [
                     "solution": "",
                     "result1": "",
                     "result2": "",
+                    "autoGrade": 0,
                     "grade": 0,
                     "comments": ""
                 }
@@ -238,6 +243,16 @@ var submissions_list = [
     ],
     []
 ]
+
+function get_question_by_ID(ID) {
+    for (var i = 0; i < questions_list.length; i++) {
+        if (questions_list[i].ID == ID) {
+            return questions_list[i];
+        }
+    }
+
+    return null;
+}
 
 function get_question_status(ID) {
     for (var i = 0; i < current_exam.questions.length; i++) {
@@ -400,7 +415,7 @@ function exam_submission_view() {
         </div>
 
         <div class="form-buttons">
-            <button class="button" onclick='save_submission()'>Grade Submission</button>
+            <button class="button" onclick='save_submission()'>Grade Exam</button>
             <button class="button" onclick='go_back()'>Cancel</button>
         </div>
     </div>
@@ -597,15 +612,30 @@ function get_submitted_questions() {
     var result = "<h4>Questions:</h4>";
 
     for (var i = 0; i < current_submission.questions.length; i++) {
+        var temp_question_result = current_submission.questions[i];
+        var temp_question = get_question_by_ID(temp_question_result.questionID);
+
         result += `
             <div class="s-block">
-                <div class="s-header">
-                    <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
-                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final.</p>
-                    <p>${current_submissions[i].comments}</p>
+                <div class="answer-header">
+                    <h3>${temp_question.name}</h3>
+                    <h4>${temp_question.description}</h4>
+                    <p>${temp_question.task}</p>
                 </div>
-                <div class="s-actions">
-                    <a onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
+                <div class="answer">
+                    <h4>Answer:</h4>
+                    <p>${temp_question_result.solution}</p>
+                    <p>Output 1: ${temp_question_result.result1}</p>
+                    <p>Output 2: ${temp_question_result.result2}</p>
+                    <p>Auto-Grader: ${temp_question_result.autoGrade}</p>
+                    <div class="input">
+                        <label>Grade</label>
+                        <input type="text" placeholder="Type Question Grade" value="${temp_question_result ? temp_question_result.grade : ""}" onchange="change_question_grade_field(${i}, 'grade', this.value)" />
+                    </div>
+                    <div class="input">
+                        <label>Comments</label>
+                        <input type="text" placeholder="Type Question Comments" value="${temp_question_result ? temp_question_result.comments : ""}" onchange="change_question_grade_field(${i}, 'comments', this.value)" />
+                    </div>
                 </div>
                 <br>
             </div>
@@ -684,6 +714,10 @@ function change_question_field(field, value) {
 
 function change_submission_field(field, value) {
     current_submission[field] = value;
+}
+
+function change_question_grade_field(i, field, value) {
+    current_submission.questions[i][field] = value;
 }
 
 function save_exam() {
