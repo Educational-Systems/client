@@ -1,6 +1,7 @@
 [
     {
         "studentName": "Dzmitry",
+        "examID": 1,
         "studentID": 1,
         "status": 2,
         "autoGrade": 20,
@@ -21,6 +22,7 @@
     },
     {
         "studentName": "Noah",
+        "examID": 1,
         "studentID": 2,
         "status": 0,
         "autoGrade": 0,
