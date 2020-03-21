@@ -1,3 +1,7 @@
+// { token: blabla }
+
+// ExamSubmissions (ID) <- SubmittedQuestions (ID)
+
 [
     {
         "studentName": "Dzmitry",

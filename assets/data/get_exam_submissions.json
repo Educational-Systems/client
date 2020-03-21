@@ -1,10 +1,11 @@
-// {}
+// { token: blabla, examID: 1 }
+
 [
     {
         "studentName": "Dzmitry",
         "examID": 1,
         "studentID": 1,
-        "status": 2,
+        "status": 2, // 0 is newly assigned, 1 is submitted by student, 2 is graded
         "autoGrade": 20,
         "grade": 20,
         "comments": "Well done!",

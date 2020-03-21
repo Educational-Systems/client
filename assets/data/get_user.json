@@ -1,9 +1,11 @@
+// { token: blabla }
+
 {
     "full_name": "Theodore Nicholson",
     "first_name": "Theodore",
     "last_name": "Nicholson",
     "email": "teacher@test.com",
-    "type": "1",
+    "type": "1", //1 is Teacher, 2 is Student
     "type_string": "teacher",
     "token": "teach_token"
 }
