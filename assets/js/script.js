@@ -66,14 +66,6 @@ login_form.addEventListener('submit', function (e) {
         data[key] = value;
     }
 
-    /*if(data.username == "teacher") {
-        window.location.href = window.location.href.replace("index", "teacher");
-        toggle_loading(false);
-    } else {
-        window.location.href = window.location.href.replace("index", "student");
-        toggle_loading(false);
-    }*/
-
     const http = new XMLHttpRequest();
     const url = 'api/login.php';
 
