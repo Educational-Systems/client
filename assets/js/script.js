@@ -56,6 +56,7 @@ login_form.addEventListener('submit', function (e) {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var result = JSON.parse(http.responseText)
+            console.log(result);
             localStorage.setItem("token", result.token);
             if (result.type == 1) {
                 window.location.href = window.location.href.replace("index", "teacher");
