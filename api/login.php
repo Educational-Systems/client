@@ -2,7 +2,7 @@
     $_POST = json_decode(file_get_contents('php://input'), true); // Receiving JSON data from the JavaScript Client
     $data = json_encode($_POST); // Encoding that data to pass it
 
-    $ch = curl_init('https://web.njit.edu/~dsk43/cs490-middle/login.php'); // Test URL
+    $ch = curl_init('https://web.njit.edu/~npm26/login.php'); // Test URL
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST"); // HTTP request method
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // Passing data to the request
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Whatever
