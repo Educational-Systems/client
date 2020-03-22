@@ -59,10 +59,10 @@ login_form.addEventListener('submit', function (e) {
             console.log(result);
             localStorage.setItem("token", result.token);
             if (result.type == 1) {
-                window.location.href = "teacher";
+                window.location.href = "teacher.html";
                 toggle_loading(false);
             } else {
-                window.location.href = "student";
+                window.location.href = "student.html";
                 toggle_loading(false);
             }
         }
