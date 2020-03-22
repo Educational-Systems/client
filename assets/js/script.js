@@ -25,6 +25,34 @@ function toggle_response(state, data = null) {
 
 }
 
+function middleTest() {
+    var data = {};
+
+    data = {
+        "questionID": 1,
+        "points": 20, // Max amount of points
+        "solution": "def add(a,b): return a + b",
+        "input1": "2, 5",
+        "output1": "7", // Expected output
+        "input2": "3, 7",
+        "output2": "21" // Expected output
+    }
+
+    const http = new XMLHttpRequest();
+    const url = 'api/middle_test.php';
+
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/json");
+    http.send(JSON.stringify(data));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var result = JSON.parse(http.responseText)
+            console.log(result);
+        }
+    }
+}
+
 login_form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -32,7 +60,7 @@ login_form.addEventListener('submit', function (e) {
     toggle_loading(true);
 
     var data = {};
-    /*var formData = new FormData(e.target);
+    var formData = new FormData(e.target);
 
     for (var [key, value] of formData.entries()) {
         data[key] = value;
@@ -46,16 +74,6 @@ login_form.addEventListener('submit', function (e) {
         toggle_loading(false);
     }*/
 
-    data = {
-        "questionID": 1,
-        "points": 20, // Max amount of points
-        "solution": "def add(a,b): return a + b",
-        "input1": "2, 5",
-        "output1": "7", // Expected output
-        "input2": "3, 7",
-        "output2": "21" // Expected output
-    }
-
     const http = new XMLHttpRequest();
     const url = 'api/login.php';
 
@@ -68,13 +86,13 @@ login_form.addEventListener('submit', function (e) {
             var result = JSON.parse(http.responseText)
             console.log(result);
             localStorage.setItem("token", result.token);
-            /*if (result.type == 1) {
+            if (result.type == 1) {
                 window.location.href = "teacher.html";
                 toggle_loading(false);
             } else {
                 window.location.href = "student.html";
                 toggle_loading(false);
-            }*/
+            }
         }
     }
 
