@@ -32,7 +32,7 @@ login_form.addEventListener('submit', function (e) {
     toggle_loading(true);
 
     var data = {};
-    var formData = new FormData(e.target);
+    /*var formData = new FormData(e.target);
 
     for (var [key, value] of formData.entries()) {
         data[key] = value;
@@ -45,6 +45,16 @@ login_form.addEventListener('submit', function (e) {
         window.location.href = window.location.href.replace("index", "student");
         toggle_loading(false);
     }*/
+
+    data = {
+        "questionID": 1,
+        "points": 20, // Max amount of points
+        "solution": "def add(a,b): return a + b",
+        "input1": "2, 5",
+        "output1": "7", // Expected output
+        "input2": "3, 7",
+        "output2": "21" // Expected output
+    }
 
     const http = new XMLHttpRequest();
     const url = 'api/login.php';
