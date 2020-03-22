@@ -78,13 +78,13 @@ login_form.addEventListener('submit', function (e) {
             var result = JSON.parse(http.responseText)
             console.log(result);
             localStorage.setItem("token", result.token);
-            /*if (result.type == 1) {
+            if (result.type == 1) {
                 window.location.href = "teacher.html";
                 toggle_loading(false);
             } else {
                 window.location.href = "student.html";
                 toggle_loading(false);
-            }*/
+            }
         }
     }
 
