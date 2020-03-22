@@ -38,15 +38,15 @@ login_form.addEventListener('submit', function (e) {
         data[key] = value;
     }
 
-    if(data.username == "teacher") {
+    /*if(data.username == "teacher") {
         window.location.href = window.location.href.replace("index", "teacher");
         toggle_loading(false);
     } else {
         window.location.href = window.location.href.replace("index", "student");
         toggle_loading(false);
-    }
+    }*/
 
-    /*const http = new XMLHttpRequest();
+    const http = new XMLHttpRequest();
     const url = 'api/login.php';
 
     http.open("POST", url, true);
@@ -56,10 +56,16 @@ login_form.addEventListener('submit', function (e) {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var result = JSON.parse(http.responseText)
-            toggle_response(true, result);
-            toggle_loading(false);
+            localStorage.setItem("token", result.token);
+            if (result.type == 1) {
+                window.location.href = window.location.href.replace("index", "teacher");
+                toggle_loading(false);
+            } else {
+                window.location.href = window.location.href.replace("index", "student");
+                toggle_loading(false);
+            }
         }
-    }*/
+    }
 
     return false;
 });
