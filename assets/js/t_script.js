@@ -440,7 +440,7 @@ function get_exams() {
                 <p>${exams_list[i].description}</p>
             </div>
             <div class="e-actions">
-                <a onclick='navigate("exam_submissions", ${exams_list[i].id})'>View Submissions</a>
+                <a onclick='navigate("exam_submissions", ${exams_list[i].id}, ${i})'>View Submissions</a>
                 <a onclick='navigate("exam_edit", ${i})'>Edit Exam</a>
                 <a>Delete Exam</a>
             </div>
@@ -793,7 +793,7 @@ function save_submission() {
 
 var nav_history = [];
 
-function navigate(place, sup_data = null) {
+function navigate(place, sup_data = null, sup_data2 = null) {
     nav_history.push(place);
 
     if (place != "exam_submission" && place != "exam_submissions") {
@@ -967,10 +967,11 @@ function navigate(place, sup_data = null) {
 
                             toggle_loading(false);
                             current_submission = null;
+                            console.log(data);
 
                             if (data != null) {
-                                current_exam = exams_list[sup_data];
-                                current_submissions = submissions_list[sup_data];
+                                current_exam = exams_list[sup_data2];
+                                current_submissions = submissions_list;
                             }
 
                             container.innerHTML = exam_submissions_view();
