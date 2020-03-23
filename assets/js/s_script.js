@@ -124,38 +124,6 @@ var submissions_list = [
                 "grade": 0,
                 "comments": "",
                 "ID": 1
-            },
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 20,
-                "comments": "Task well done!",
-                "ID": 1
-            },
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 20,
-                "comments": "Task well done!",
-                "ID": 1
             }
         ]
     },

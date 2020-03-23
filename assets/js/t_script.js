@@ -939,7 +939,7 @@ function navigate(place, sup_data = null) {
         case "exam_submissions": {
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token"), examID: data };
+            var data = { token: localStorage.getItem("token"), examID: sup_data };
 
             const http = new XMLHttpRequest();
             var url = 'api/get_exam_submissions.php';
