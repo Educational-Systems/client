@@ -614,14 +614,13 @@ function get_submitted_questions() {
 
     for (var i = 0; i < current_submission.questions.length; i++) {
         var temp_question_result = current_submission.questions[i];
-        var temp_question = get_question_by_ID(temp_question_result.questionID);
 
         result += `
             <div class="s-block">
                 <div class="answer-header">
-                    <h3>${temp_question.name}</h3>
-                    <h4>${temp_question.description}</h4>
-                    <p>${temp_question.task}</p>
+                    <h3>${temp_question_result.name}</h3>
+                    <h4>${temp_question_result.description}</h4>
+                    <p>${temp_question_result.task}</p>
                 </div>
                 <div class="answer">
                     <h4>Answer:</h4>
