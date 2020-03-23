@@ -440,7 +440,7 @@ function get_exams() {
                 <p>${exams_list[i].description}</p>
             </div>
             <div class="e-actions">
-                <a onclick='navigate("exam_submissions", ${i})'>View Submissions</a>
+                <a onclick='navigate("exam_submissions", ${exams_list[i].id})'>View Submissions</a>
                 <a onclick='navigate("exam_edit", ${i})'>Edit Exam</a>
                 <a>Delete Exam</a>
             </div>
