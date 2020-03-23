@@ -13,3 +13,8 @@
         }
     ]
 }
+
+// you receive object specified above
+// update submissions record with grade and comments
+// for each submitted question:
+//  update with grade and comments in questions array
