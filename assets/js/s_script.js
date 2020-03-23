@@ -372,28 +372,13 @@ function navigate(place, sup_data = null) {
                     http.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
                             var result = JSON.parse(http.responseText);
-                            submissions_list = result;
-                            current_submissions = submissions_list;
+                            current_submissions = result;
                             container.innerHTML = home_view();
                             toggle_loading(false);
                         }
                     }
                 }
             }
-
-            /*current_user = {
-                "full_name": "Dzmitry Kuzmitch",
-                "first_name": "Dzmitry",
-                "last_name": "Kuzmitch",
-                "email": "student@test.com",
-                "type": "2",
-                "type_string": "student",
-                "token": "teach_token"
-            }
-
-            current_submissions = submissions_list;*/
-
-            container.innerHTML = home_view();
 
             break;
         }
