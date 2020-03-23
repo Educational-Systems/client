@@ -53,6 +53,24 @@ function middleTest() {
     }
 }
 
+function unauthorizedTest() {
+    var data = { "nontoken": "faild" };
+
+    const http = new XMLHttpRequest();
+    const url = 'api/unathorized.php';
+
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/json");
+    http.send(JSON.stringify(data));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var result = JSON.parse(http.responseText)
+            console.log(result);
+        }
+    }
+}
+
 login_form.addEventListener('submit', function (e) {
     e.preventDefault();
 
