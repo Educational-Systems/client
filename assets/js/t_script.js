@@ -693,8 +693,9 @@ function add_student(value, ID, examID) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 //var result = JSON.parse(http.responseText);
-                document.getElementById("submissions_container").innerHTML = get_submissions();
                 toggle_loading(false);
+                navigate("exam_submissions", current_exam.id);
+                //document.getElementById("submissions_container").innerHTML = get_submissions();
             }
         }
     }
