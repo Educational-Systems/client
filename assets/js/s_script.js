@@ -349,7 +349,7 @@ function navigate(place, sup_data = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = 'api/get_user.php';
+            var url = 'api/get_user.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
