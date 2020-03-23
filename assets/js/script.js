@@ -67,6 +67,8 @@ function unauthorizedTest() {
         if (this.readyState == 4 && this.status == 200) {
             var result = JSON.parse(http.responseText)
             console.log(result);
+        } else {
+            console.log("Something is wrong, man.", result);
         }
     }
 }
