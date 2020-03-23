@@ -318,8 +318,8 @@ function save_submission() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var result = JSON.parse(http.responseText);
-            console.log(result);
+            //var result = JSON.parse(http.responseText);
+            //console.log(result);
             toggle_loading(false);
             navigate("home");
         }
