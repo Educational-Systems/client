@@ -918,6 +918,7 @@ function navigate(place, data = null) {
 
                     toggle_loading(false);
                     current_exam = exams_list[data];
+                    console.log(current_exam);
                     container.innerHTML = exam_edit_view();
                 }
             }
