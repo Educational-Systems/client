@@ -360,10 +360,8 @@ function navigate(place, sup_data = null) {
                     var result = JSON.parse(http.responseText);
                     current_user = result;
 
-                    var data = { token: localStorage.getItem("token") };
-
-                    const http = new XMLHttpRequest();
-                    var url = 'api/get_user_exams.php';
+                    data = { token: localStorage.getItem("token") };
+                    url = 'api/get_user_exams.php';
 
                     http.open("POST", url, true);
                     http.setRequestHeader("Content-type", "application/json");
@@ -371,7 +369,7 @@ function navigate(place, sup_data = null) {
 
                     http.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
-                            var result = JSON.parse(http.responseText);
+                            result = JSON.parse(http.responseText);
                             current_submissions = result;
                             container.innerHTML = home_view();
                             toggle_loading(false);
