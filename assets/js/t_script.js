@@ -681,27 +681,23 @@ function change_points(value, ID) {
 
 function add_student(value, ID, name) {
     if (value) {
-        current_submissions.push({
-            ...new_submission,
-            studentName: name,
-            studentID: ID,
-            questions: current_exam.questions.map(x => {
-                return {
-                    ...new_sub_question,
-                    questionID: x.ID
-                }
-            })
-        });
-    } else {
-        for (var i = 0; i < current_submissions.length; i++) {
-            if (current_submissions[i].studentID == ID) {
-                current_submissions.splice(i, 1);
-                break;
+        var data = { token: localStorage.getItem("token") };
+
+        const http = new XMLHttpRequest();
+        const url = 'api/enroll_student.php';
+
+        http.open("POST", url, true);
+        http.setRequestHeader("Content-type", "application/json");
+        http.send(JSON.stringify(data));
+
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //var result = JSON.parse(http.responseText);
+                document.getElementById("submissions_container").innerHTML = get_submissions();
+                toggle_loading(false);
             }
         }
     }
-
-    document.getElementById("submissions_container").innerHTML = get_submissions();
 }
 
 function change_exam_field(field, value) {
