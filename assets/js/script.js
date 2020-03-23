@@ -57,7 +57,7 @@ function unauthorizedTest() {
     var data = { "nontoken": "faild" };
 
     const http = new XMLHttpRequest();
-    const url = 'api/unathorized.php';
+    const url = 'api/unauthorized.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
