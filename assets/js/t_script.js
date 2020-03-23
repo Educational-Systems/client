@@ -791,7 +791,7 @@ function save_submission() {
 
 var nav_history = [];
 
-function navigate(place, data = null) {
+function navigate(place, sup_data = null) {
     nav_history.push(place);
 
     if (place != "exam_submission" && place != "exam_submissions") {
@@ -917,7 +917,7 @@ function navigate(place, data = null) {
                     questions_list = result;
 
                     toggle_loading(false);
-                    current_exam = exams_list[data];
+                    current_exam = exams_list[sup_data];
                     console.log(current_exam);
                     container.innerHTML = exam_edit_view();
                 }
@@ -930,7 +930,7 @@ function navigate(place, data = null) {
             break;
         }
         case "question_edit": {
-            current_question = questions_list[data];
+            current_question = questions_list[sup_data];
             container.innerHTML = question_edit_view();
             break;
         }
@@ -967,8 +967,8 @@ function navigate(place, data = null) {
                             current_submission = null;
 
                             if (data != null) {
-                                current_exam = exams_list[data];
-                                current_submissions = submissions_list[data];
+                                current_exam = exams_list[sup_data];
+                                current_submissions = submissions_list[sup_data];
                             }
 
                             container.innerHTML = exam_submissions_view();
@@ -979,7 +979,7 @@ function navigate(place, data = null) {
             break;
         }
         case "exam_submission": {
-            current_submission = current_submissions[data];
+            current_submission = current_submissions[sup_data];
             container.innerHTML = exam_submission_view();
             break;
         }
