@@ -775,7 +775,7 @@ function save_submission() {
             //var result = JSON.parse(http.responseText);
             //console.log(result);
             toggle_loading(false);
-            nav_history.splice(nav_history.length - 2, 1);
+            nav_history.splice(nav_history.length - 1, 1);
             navigate("exam_submissions", current_exam.ID);
         }
     }
