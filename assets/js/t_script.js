@@ -792,10 +792,10 @@ function navigate(place, sup_data = null, sup_data2 = null) {
     nav_history.push(place);
 
     if (place != "exam_submission" && place != "exam_submissions") {
-        current_exam = null;
+        /*current_exam = null;
         current_question = null;
         current_submissions = null;
-        current_submission = null;
+        current_submission = null;*/
     }
 
     switch (place) {
@@ -873,6 +873,8 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exam_create": {
+            current_exam = null;
+
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -897,6 +899,8 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exam_edit": {
+            current_exam = null;
+
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -922,11 +926,13 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "question_create": {
+            current_question = null;
             current_question = copy(new_question);
             container.innerHTML = question_create_view();
             break;
         }
         case "question_edit": {
+            current_question = null;
             current_question = questions_list[sup_data];
             container.innerHTML = question_edit_view();
             break;
