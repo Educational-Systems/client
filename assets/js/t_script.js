@@ -55,8 +55,10 @@ var new_question = {
     "name": "",
     "description": "",
     "task": "",
-    "input": "",
-    "output": ""
+    "input1": "",
+    "output1": "",
+    "input2": "",
+    "output2": ""
 }
 
 var new_submission = {
