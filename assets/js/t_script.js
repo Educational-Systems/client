@@ -721,14 +721,65 @@ function change_question_grade_field(i, field, value) {
 
 function save_exam() {
     console.log(current_exam);
+    var data = { ...current_exam, token: localStorage.getItem("token") };
+
+    const http = new XMLHttpRequest();
+    const url = 'api/save_exam.php';
+
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/json");
+    http.send(JSON.stringify(data));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var result = JSON.parse(http.responseText);
+            console.log(result);
+            toggle_loading(false);
+            navigate("exams");
+        }
+    }
 }
 
 function save_question() {
     console.log(current_question);
+    var data = { ...current_question, token: localStorage.getItem("token") };
+
+    const http = new XMLHttpRequest();
+    const url = 'api/save_question.php';
+
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/json");
+    http.send(JSON.stringify(data));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var result = JSON.parse(http.responseText);
+            console.log(result);
+            toggle_loading(false);
+            navigate("questions");
+        }
+    }
 }
 
 function save_submission() {
     console.log(current_submission);
+    var data = { ...current_submission, token: localStorage.getItem("token") };
+
+    const http = new XMLHttpRequest();
+    const url = 'api/save_teacher_submission.php';
+
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/json");
+    http.send(JSON.stringify(data));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var result = JSON.parse(http.responseText);
+            console.log(result);
+            toggle_loading(false);
+            navigate("exam_submissions", current_exam.ID);
+        }
+    }
 }
 
 /* <------------ Logic Functions <------------ */
