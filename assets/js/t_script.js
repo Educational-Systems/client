@@ -900,8 +900,6 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exam_edit": {
-            current_exam = null;
-
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -972,7 +970,16 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                             console.log(data);
 
                             if (data != null) {
-                                current_exam = exams_list[sup_data2];
+                                var ex_id = 0;
+
+                                for (var i = 0; i < exams_list.length; i++) {
+                                    if (exams_list[i].id == sup_data) {
+                                        ex_id = i;
+                                        break;
+                                    }
+                                }
+
+                                current_exam = exams_list[ex_id]; //BACK HERE!
                                 current_submissions = submissions_list;
                             }
 
