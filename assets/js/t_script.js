@@ -600,7 +600,7 @@ function get_students() {
 
         result += `
             <div class="stud-selection">
-                <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_student(this.checked, ${temp_student.ID}, '${temp_student.name}')">
+                <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_student(this.checked, ${temp_student.ID}, '${current_exam.id}')">
                 <label><b>${temp_student.name}</b></label>
             </div>
         `;
@@ -679,9 +679,9 @@ function change_points(value, ID) {
     }
 }
 
-function add_student(value, ID, name) {
+function add_student(value, ID, examID) {
     if (value) {
-        var data = { token: localStorage.getItem("token") };
+        var data = { studentID: ID, examID: examID };
 
         const http = new XMLHttpRequest();
         const url = 'api/enroll_student.php';
