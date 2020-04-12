@@ -1,0 +1,41 @@
+// { token: blabla }
+
+[
+    {
+        "name": "Exam 1",
+        "description": "This is Exam 1",
+        "questions": [
+            {
+                "questionID": 1,
+                "points": 20
+            }
+        ],
+        "ID": 1
+    },
+    {
+        "name": "Exam 2",
+        "description": "This is Exam 2",
+        "questions": [
+            {
+                "questionID": 2,
+                "points": 10
+            },
+            {
+                "questionID": 3,
+                "points": 10
+            }
+        ],
+        "ID": 2
+    },
+    {
+        "name": "Exam 3",
+        "description": "This is Exam 3",
+        "questions": [
+            {
+                "questionID": 2,
+                "points": 20
+            }
+        ],
+        "ID": 3
+    }
+]

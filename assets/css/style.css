@@ -3,10 +3,17 @@ form, body, html {
     font-family: 'Arial', sans-serif;
 }
 
-body {
-    background-image: url(../img/back.jpg);
-    background-size: cover;
-    background-position: center;
+h1, h2, h3, h4, p {
+    margin: 0px;
+}
+
+#container div {
+    margin: 10px;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .loading {
@@ -87,5 +94,22 @@ body {
     border: 1px solid rgba(0,0,0,.12);
     box-shadow: 0 0 0 0 rgba(0,0,0,.2), 0 0 0 0 rgba(0,0,0,.14), 0 0 0 0 rgba(0,0,0,.12);
     outline: 0 !important;
+}
+
+.form-buttons {
+    display: flex;
+}
+
+.form-buttons button {
+    margin-right: 10px;
+}
+
+#container .input {
+    width: 200px;
+}
+
+.q-selector {
+    max-height: 300px;
+    overflow-y: scroll;
 }
 

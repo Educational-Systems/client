@@ -1,0 +1,14 @@
+// Exams (ID) -> ExamQuestions (examID, questionID) <- Questions (ID)
+
+{
+    "token": "blabla",
+    "name": "Exam 1",
+    "description": "This is Exam 1 Edited",
+    "questions": [
+        {
+            "questionID": 1,
+            "points": 20
+        } // if has missing question - delete
+    ],
+    "ID": 1 // can be null, meaning new Exam
+}

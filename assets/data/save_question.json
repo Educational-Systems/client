@@ -1,0 +1,11 @@
+{
+    "token": "blabla",
+    "name": "Q2",
+    "description": "This is Question 2: multiplication. (Edited).",
+    "task": "Created function 'mult' which will output the multiplication of two numbers.",
+    "input1": "2, 5",
+    "output1": "10",
+    "input2": "3, 7",
+    "output2": "21",
+    "ID": 2 // if null = new Question
+}
