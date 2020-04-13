@@ -145,7 +145,7 @@ function get_assignment_status(ID) {
 function home_view() {
     return `
     <div>
-        <h2>Welcome ${current_user.full_name}!</h2>
+        <h2>Welcome${current_user ? " " + current_user.full_name : ""}!</h2>
         <div class="block-body">
             <h4>Please, select desired page:</h4>
             <ul>
@@ -328,42 +328,43 @@ function get_questions(id) {
 
         if (id == 3) {
             innerResult = `
+                <h4 style="margin-top: 10px; margin-left: 2px; margin-bottom: 5px;">Points per requirement:</h4>
                 <div class="q-selection">                
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Function Name</label>
-                        <input type="number" step="1" placeholder="For function name" onchange="change_points(this.value, ${temp_question.ID}, 'function_name_points')" value="${temp_status ? temp_status.function_name_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'function_name_points')" value="${temp_status ? temp_status.function_name_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Constraint</label>
-                        <input type="number" step="1" placeholder="For constraint" onchange="change_points(this.value, ${temp_question.ID}, 'constraint_points')" value="${temp_status ? temp_status.constraint_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'constraint_points')" value="${temp_status ? temp_status.constraint_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Colon</label>
-                        <input type="number" step="1" placeholder="For colon" onchange="change_points(this.value, ${temp_question.ID}, 'colon_points')" value="${temp_status ? temp_status.colon_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'colon_points')" value="${temp_status ? temp_status.colon_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Test 1</label>
-                        <input type="number" step="1" placeholder="For Test 1" onchange="change_points(this.value, ${temp_question.ID}, 'output1_points')" value="${temp_status ? temp_status.output1_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output1_points')" value="${temp_status ? temp_status.output1_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Test 2</label>
-                        <input type="number" step="1" placeholder="For Test 2" onchange="change_points(this.value, ${temp_question.ID}, 'output2_points')" value="${temp_status ? temp_status.output2_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output2_points')" value="${temp_status ? temp_status.output2_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Test 3</label>
-                        <input type="number" step="1" placeholder="For Test 3" onchange="change_points(this.value, ${temp_question.ID}, 'output3_points')" value="${temp_status ? temp_status.output3_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output3_points')" value="${temp_status ? temp_status.output3_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Test 4</label>
-                        <input type="number" step="1" placeholder="For Test 4" onchange="change_points(this.value, ${temp_question.ID}, 'output4_points')" value="${temp_status ? temp_status.output4_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output4_points')" value="${temp_status ? temp_status.output4_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Test 5</label>
-                        <input type="number" step="1" placeholder="For Test 5" onchange="change_points(this.value, ${temp_question.ID}, 'output5_points')" value="${temp_status ? temp_status.output5_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output5_points')" value="${temp_status ? temp_status.output5_points : ""}" />
                     </div>
                     <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                         <label>Test 6</label>
-                        <input type="number" step="1" placeholder="For Test 6" onchange="change_points(this.value, ${temp_question.ID}, 'output6_points')" value="${temp_status ? temp_status.output6_points : ""}" />
+                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output6_points')" value="${temp_status ? temp_status.output6_points : ""}" />
                     </div>
                 </div>`;
         }
@@ -398,63 +399,6 @@ function get_questions(id) {
             
         </div>`;
     }
-    return result;
-}
-
-function get_questions_selector() {
-    var result = "<h4>Exam Questions:</h4>";
-
-    for (var i = 0; i < filtered_questions_list.length; i++) {
-        var temp_question = filtered_questions_list[i];
-        var temp_status = get_question_status(temp_question.ID);
-        var is_applied = temp_status ? true : false;
-
-        result += `
-            <div class="q-selection">
-                <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_question(this.checked, ${temp_question.ID})">
-                <label><b>${temp_question.name}</b></label>
-                <p>${temp_question.description}</p>
-                
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Function Name Points</label>
-                    <input type="number" step="1" placeholder="For function name" onchange="change_points(this.value, ${temp_question.ID}, 'function_name_points')" value="${temp_status ? temp_status.function_name_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Constraint Points</label>
-                    <input type="number" step="1" placeholder="For constraint" onchange="change_points(this.value, ${temp_question.ID}, 'constraint_points')" value="${temp_status ? temp_status.constraint_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Colon Points</label>
-                    <input type="number" step="1" placeholder="For colon" onchange="change_points(this.value, ${temp_question.ID}, 'colon_points')" value="${temp_status ? temp_status.colon_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Test 1 Points</label>
-                    <input type="number" step="1" placeholder="For Test 1" onchange="change_points(this.value, ${temp_question.ID}, 'output1_points')" value="${temp_status ? temp_status.output1_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Test 2 Points</label>
-                    <input type="number" step="1" placeholder="For Test 2" onchange="change_points(this.value, ${temp_question.ID}, 'output2_points')" value="${temp_status ? temp_status.output2_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Test 3 Points</label>
-                    <input type="number" step="1" placeholder="For Test 3" onchange="change_points(this.value, ${temp_question.ID}, 'output3_points')" value="${temp_status ? temp_status.output3_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Test 4 Points</label>
-                    <input type="number" step="1" placeholder="For Test 4" onchange="change_points(this.value, ${temp_question.ID}, 'output4_points')" value="${temp_status ? temp_status.output4_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Test 5 Points</label>
-                    <input type="number" step="1" placeholder="For Test 5" onchange="change_points(this.value, ${temp_question.ID}, 'output5_points')" value="${temp_status ? temp_status.output5_points : ""}" />
-                </div>
-                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                    <label>Test 6 Points</label>
-                    <input type="number" step="1" placeholder="For Test 6" onchange="change_points(this.value, ${temp_question.ID}, 'output6_points')" value="${temp_status ? temp_status.output6_points : ""}" />
-                </div>
-            </div>
-        `;
-    }
-
     return result;
 }
 
@@ -899,6 +843,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
         }
         case "home": {
             title = "Home";
+            container.innerHTML = home_view();
             toggle_loading(true);
 
             var data = { token: sessionStorage.getItem("token") };
