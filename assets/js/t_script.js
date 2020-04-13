@@ -220,12 +220,8 @@ function exam_submissions_view() {
     return `
     <div>
         <div>
-            <h3>${current_exam.name}</h3>
+            <h3 style="margin-bottom: 5px;">${current_exam.name}</h3>
             <p>${current_exam.description}</p>
-        </div>
-        <br>
-        <div id="submissions_container" class="s-container">
-            ${get_submissions()}
         </div>
         <div class="stud-list"> 
             ${get_students()}
@@ -544,7 +540,7 @@ function get_question_data() {
 }
 
 function get_submissions() {
-    var result = "<h4>Submissions:</h4>";
+    var result = "<h3>Submissions:</h3>";
 
     for (var i = 0; i < current_submissions.length; i++) {
         result += `
@@ -557,7 +553,6 @@ function get_submissions() {
                 <div class="s-actions">
                     <a class="new-button" onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
                 </div>
-                <br>
             </div>
         `;
     }
@@ -568,7 +563,7 @@ function get_submissions() {
 function get_students() {
     var result = "";
 
-    var result = "<h4>Assign to Students:</h4>";
+    var result = "<h3>Assign to Students:</h3>";
 
     for (var i = 0; i < students_list.length; i++) {
         var temp_student = students_list[i];
@@ -593,7 +588,7 @@ function get_submitted_questions() {
         var temp_question_result = current_submission.questions[i];
 
         result += `
-            <div class="s-block">
+            <div class="sq-block">
                 <div class="answer-header">
                     <h3>${temp_question_result.name}</h3>
                     <h4>${temp_question_result.description}</h4>
@@ -614,7 +609,6 @@ function get_submitted_questions() {
                         <input type="text" placeholder="Type Question Comments" value="${temp_question_result ? temp_question_result.comments : ""}" onchange="change_question_grade_field(${i}, 'comments', this.value)" />
                     </div>
                 </div>
-                <br>
             </div>
         `;
     }
@@ -1113,6 +1107,12 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                                 current_exam = exams_list[ex_id];
                                 current_submissions = submissions_list;
                             }
+
+                            footer_dom.style = "display: block";
+                            footer_dom.innerHTML = `
+                            <div id="submissions_container" class="s-container">
+                                ${get_submissions()}
+                            </div>`;
 
                             container.innerHTML = exam_submissions_view();
                         }
