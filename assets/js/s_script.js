@@ -139,18 +139,18 @@ function get_submitted_questions() {
                     <div class="results" style="${current_submission.status == 0 ? "display: none;" : ""}">
                         <div class="points-container">
                         <div class="points-block">
-                        ${temp_question.input1 ? `<p>Result 1: ${temp_question.result1} <br>Points: ${temp_question.output1_points}</p>` : ""}
-                        ${temp_question.input2 ? `<p>Result 2: ${temp_question.result2} <br>Points: ${temp_question.output2_points}</p>` : ""}
+                        ${temp_question.input1 ? `<p>Result 1: ${temp_question.result1} <br>Points: ${temp_question.result1_points}</p>` : ""}
+                        ${temp_question.input2 ? `<p>Result 2: ${temp_question.result2} <br>Points: ${temp_question.result2_points}</p>` : ""}
                         ${temp_question.function_name ? `<p>Function Name Check: ${temp_question.function_name_result} <br>Function Name Check Points: ${temp_question.function_name_result_points}</p>` : ""}
                         </div>
                         <div class="points-block">
-                        ${temp_question.input3 ? `<p>Result 3: ${temp_question.result3} <br>Points: ${temp_question.output3_points}</p>` : ""}
-                        ${temp_question.input4 ? `<p>Result 4: ${temp_question.result4} <br>Points: ${temp_question.output4_points}</p>` : ""}
+                        ${temp_question.input3 ? `<p>Result 3: ${temp_question.result3} <br>Points: ${temp_question.result3_points}</p>` : ""}
+                        ${temp_question.input4 ? `<p>Result 4: ${temp_question.result4} <br>Points: ${temp_question.result4_points}</p>` : ""}
                         ${temp_question.constraint ? `<p>Constraint Check: ${temp_question.constraint_result} <br>Constraint Check Points: ${temp_question.constraint_result_points}</p>` : ""}
                         </div>
                         <div class="points-block">
-                        ${temp_question.input5 ? `<p>Result 5: ${temp_question.result5} <br>Points: ${temp_question.output5_points}</p>` : ""}
-                        ${temp_question.input6 ? `<p>Result 6: ${temp_question.result6} <br>Points: ${temp_question.output6_points}</p>` : ""}
+                        ${temp_question.input5 ? `<p>Result 5: ${temp_question.result5} <br>Points: ${temp_question.result5_points}</p>` : ""}
+                        ${temp_question.input6 ? `<p>Result 6: ${temp_question.result6} <br>Points: ${temp_question.result6_points}</p>` : ""}
                         ${temp_question.colon_points ? `<p>Colon Check: ${temp_question.colon_result} <br>Colon Check Points: ${temp_question.colon_result_points}</p>` : ""}
                         </div>
                     </div>
