@@ -3,7 +3,7 @@ var submit_btn = document.getElementById("submit-btn");
 var response_block = document.getElementById("response-block");
 var loading = document.getElementById("loading");
 
-var pre_url = "http://localhost:8080/";
+var pre_url = "";
 
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";

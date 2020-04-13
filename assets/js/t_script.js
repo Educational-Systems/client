@@ -3,7 +3,7 @@ var container = document.getElementById("container");
 var title_dom = document.getElementById("title");
 var footer_dom = document.getElementById("footer");
 
-var pre_url = "http://localhost:8080/";
+var pre_url = "";
 
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";

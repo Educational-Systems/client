@@ -1,7 +1,7 @@
 var loading = document.getElementById("loading");
 var container = document.getElementById("container");
 
-var pre_url = "http://localhost:8080/";
+var pre_url = "";
 
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";
