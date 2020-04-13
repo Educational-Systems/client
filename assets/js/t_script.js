@@ -43,10 +43,19 @@ var current_exam = null;
 var current_question = null;
 var current_submissions = null;
 var current_submission = null;
+var current_filter = null
 
 var exams_list = [];
+var questions_list = [];
+var filtered_questions_list = [];
 var students_list = [];
 var submissions_list = [];
+
+var new_filter = {
+    "keyword": "",
+    "difficultyID": 0,
+    "topicID": 0
+}
 
 var new_exam = {
     "name": "",
@@ -165,6 +174,13 @@ function questions_view() {
     <div>
         <div class="act-container">
             <a class="new-button btn-action" onclick='navigate("question_create")'>Create Question</a>
+            <div class="filter">
+                <div class="input">
+                    <label for="filter_keyword">Keyword</label>
+                    <input type="text" name="filter_keyword" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_question_field('output4', this.value)" />
+                </div>
+                <a class="new-button btn-action" onclick='reset_filter()'>Reset</a>
+            </div>
         </div>
         <div class="q-container">
             ${get_questions()}
@@ -313,12 +329,12 @@ function get_exam_data() {
 
 function get_questions() {
     var result = "";
-    for (var i = 0; i < questions_list.length; i++) {
+    for (var i = 0; i < filtered_questions_list.length; i++) {
         result += `
         <div class="q-block">
             <div class="q-header">
-                <h4>${questions_list[i].name}</h4>
-                <p>${questions_list[i].description}</p>
+                <h4>${filtered_questions_list[i].name}</h4>
+                <p>${filtered_questions_list[i].description}</p>
             </div>
             <div class="q-actions">
                 <a class="new-button" onclick='navigate("question_edit", ${i})'>Edit Question</a>
@@ -332,8 +348,8 @@ function get_questions() {
 function get_questions_selector() {
     var result = "<h4>Exam Questions:</h4>";
 
-    for (var i = 0; i < questions_list.length; i++) {
-        var temp_question = questions_list[i];
+    for (var i = 0; i < filtered_questions_list.length; i++) {
+        var temp_question = filtered_questions_list[i];
         var temp_status = get_question_status(temp_question.ID);
         var is_applied = temp_status ? true : false;
 
@@ -371,7 +387,7 @@ function get_question_data() {
                 </div>
                 <div class="input">
                     <label for="difficultyID">Difficulty</label>
-                    <select id="difficultyID" value="${current_question ? current_question.difficultyID : ""}" onchange="change_question_field('difficultyID', this.value)">
+                    <select id="difficultyID" value="${current_question ? Number(current_question.difficultyID) : ""}" onchange="change_question_field('difficultyID', this.value)">
                         ${get_difficulties()}
                     </select>
                 </div>
@@ -379,13 +395,13 @@ function get_question_data() {
                 <div class="general-block">
                 <div class="input">
                     <label for="topicID">Topic</label>
-                    <select id="topicID" value="${current_question ? current_question.topicID : ""}" onchange="change_question_field('topicID', this.value)">
+                    <select id="topicID" value="${current_question ? Number(current_question.topicID) : ""}" onchange="change_question_field('topicID', this.value)">
                         ${get_topics()}
                     </select>
                 </div>
                 <div class="input">
                     <label for="constraintID">Constraint</label>
-                    <select id="constraintID" value="${current_question ? current_question.constraintID : ""}" onchange="change_question_field('constraintID', this.value)">
+                    <select id="constraintID" value="${current_question ? Number(current_question.constraintID) : ""}" onchange="change_question_field('constraintID', this.value)">
                         ${get_constraints()}
                     </select>
                 </div>
@@ -654,6 +670,14 @@ function change_question_grade_field(i, field, value) {
     current_submission.questions[i][field] = value;
 }
 
+function change_filter(field, value) {
+    current_filter[field] = value;
+}
+
+function reset_filter() {
+    current_filter = copy(new_filter);
+}
+
 function save_exam() {
     var data = { ...current_exam, token: sessionStorage.getItem("token") };
 
@@ -826,6 +850,8 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                 if (this.readyState == 4 && this.status == 200) {
                     var result = JSON.parse(http.responseText);
                     questions_list = result;
+                    filtered_questions_list = questions_list;
+                    current_filter = copy(new_filter);
 
                     toggle_loading(false);
                     container.innerHTML = questions_view();
@@ -852,6 +878,8 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                 if (this.readyState == 4 && this.status == 200) {
                     var result = JSON.parse(http.responseText);
                     questions_list = result;
+                    filtered_questions_list = questions_list;
+                    current_filter = copy(new_filter);
 
                     toggle_loading(false);
                     current_exam = copy(new_exam);
@@ -877,6 +905,8 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                 if (this.readyState == 4 && this.status == 200) {
                     var result = JSON.parse(http.responseText);
                     questions_list = result;
+                    filtered_questions_list = questions_list;
+                    current_filter = copy(new_filter);
 
                     toggle_loading(false);
                     current_exam = exams_list[sup_data];
