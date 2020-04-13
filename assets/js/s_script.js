@@ -132,9 +132,9 @@ function get_submitted_questions() {
                         <label for="question_task">Solution</label>
                         <textarea name="question_task" placeholder="Type Question Solution" onchange="change_question_solution_field(${i}, 'solution', this.value)">${temp_question ? temp_question.solution : ""}</textarea>
                     </div>
-                    
-                    <h4>Solution:</h4>
-                    <p>${temp_question ? temp_question.solution : ""}</p>
+
+                    <h4 style="${current_submission.status == 0 ? "display: none;" : ""}">Solution:</h4>
+                    <p style="${current_submission.status == 0 ? "display: none;" : ""}">${temp_question ? temp_question.solution : ""}</p>
 
                     <div class="results" style="${current_submission.status == 0 ? "display: none;" : ""}">
                         <div class="points-container">
