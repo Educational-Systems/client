@@ -56,17 +56,17 @@ function exam_submission_view() {
     <div>
         <h2>Exam Submission:</h2>
         <div>
-            <h3>${current_submission.examName}</h3>
+            <h3 style="margin: 10px 0px;">${current_submission.examName}</h3>
             <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
             <h4>Grade: ${current_submission.grade}</h4>
-            <p>${current_submission.examDescription}</p>
+            <p style="margin: 10px 0px;">${current_submission.examDescription}</p>
         </div>
 
         <div class="submission-container">
             ${get_submitted_questions()}
         </div>
 
-        <div class="form-buttons">
+        <div class="form-buttons" style="margin-top: 20px;">
             <button class="button" style="${current_submission.status != 0 ? "display: none;" : ""}" onclick='save_submission()'>Submit Exam</button>
             <button class="button" onclick='go_back()'>Exit</button>
         </div>
@@ -95,75 +95,17 @@ function get_submissions() {
     return result;
 }
 
-/*
-name: "While Loop"
-description: null
-task: "Create function get_all which will get all"
-solution: ""
-function_name: "test"
-function_name_points: "0"
-constraint: "for"
-constraint_points: "0"
-colon_points: "0"
-input1: "1"
-input2: "1"
-input3: "1"
-input4: "1"
-input5: "1"
-input6: "1"
-output1: "1"
-output2: "1"
-output3: "1"
-output4: "1"
-output5: "1"
-output6: "1"
-result1: ""
-result2: ""
-result3: ""
-result4: ""
-result5: ""
-result6: ""
-function_name_result: ""
-colon_result: ""
-constraint_result: ""
-output1_points: ""
-output2_points: ""
-output3_points: ""
-output4_points: ""
-output5_points: ""
-output6_points: ""
-result1_points: "0"
-result2_points: "0"
-result3_points: "0"
-result4_points: "0"
-result5_points: "0"
-result6_points: "0"
-function_name_result_points: "0"
-colon_result_points: "0"
-constraint_result_points: "0"
-autoGrade: "0"
-grade: "0"
-comments: ""
-ID: "28"
-output1_result: null
-output2_result: null
-output3_result: null
-output4_result: null
-output5_result: null
-output6_result: null
-*/
-
 function get_submitted_questions() {
     var result = "";
 
     for (var i = 0; i < current_submission.questions.length; i++) {
         var temp_question = current_submission.questions[i];
         result += `
-            <div class="s-block">
+            <div class="s-block" style="flex-direction: column; align-items: flex-start;">
                 <div class="answer-header">
                     <h3>${temp_question.name}</h3>
 
-                    ${temp_question.description != null ? `<h4>${temp_question.description}</h4>` : ""}
+                    ${temp_question.description != null ? `<h4 style="margin: 10px 0px;">${temp_question.description}</h4>` : ""}
 
                     <p style="margin-top: 5px; margin-bottom: 5px;">${temp_question.task}</p>
 
@@ -184,17 +126,34 @@ function get_submitted_questions() {
                         ${temp_question.colon_points ? `<p>Colon Points: ${temp_question.colon_points}</p>` : ""}
                         </div>
                     </div>
-                
                 </div>
-                <div class="answer">
-                    <div class="input" style="${current_submission.status != 0 ? "display: none;" : ""}">
-                        <label>Solution:</label>
-                        <input type="text" placeholder="Type Question Solution" value="${temp_question ? temp_question.solution : ""}" onchange="change_question_solution_field(${i}, 'solution', this.value)" />
+                <div class="answer" style="width: 100%">                    
+                    <div class="input textarea-input" style="${current_submission.status != 0 ? "display: none;" : ""}">
+                        <label for="question_task">Solution</label>
+                        <textarea name="question_task" placeholder="Type Question Solution" onchange="change_question_solution_field(${i}, 'solution', this.value)">${temp_question ? temp_question.solution : ""}</textarea>
                     </div>
+                    
+                    <h4>Solution:</h4>
+                    <p>${temp_question ? temp_question.solution : ""}</p>
+
                     <div class="results" style="${current_submission.status == 0 ? "display: none;" : ""}">
-                        <p>Solution: ${temp_question.solution}</p>
-                        <p>Result 1: ${temp_question.result1}</p>
-                        <p>Result 2: ${temp_question.result2}</p>
+                        <div class="points-container">
+                        <div class="points-block">
+                        ${temp_question.input1 ? `<p>Result 1: ${temp_question.result1} <br>Points: ${temp_question.output1_points}</p>` : ""}
+                        ${temp_question.input2 ? `<p>Result 2: ${temp_question.result2} <br>Points: ${temp_question.output2_points}</p>` : ""}
+                        ${temp_question.function_name ? `<p>Function Name Check: ${temp_question.function_name_result} <br>Function Name Check Points: ${temp_question.function_name_result_points}</p>` : ""}
+                        </div>
+                        <div class="points-block">
+                        ${temp_question.input3 ? `<p>Result 3: ${temp_question.result3} <br>Points: ${temp_question.output3_points}</p>` : ""}
+                        ${temp_question.input4 ? `<p>Result 4: ${temp_question.result4} <br>Points: ${temp_question.output4_points}</p>` : ""}
+                        ${temp_question.constraint ? `<p>Constraint Check: ${temp_question.constraint_result} <br>Constraint Check Points: ${temp_question.constraint_result_points}</p>` : ""}
+                        </div>
+                        <div class="points-block">
+                        ${temp_question.input5 ? `<p>Result 5: ${temp_question.result5} <br>Points: ${temp_question.output5_points}</p>` : ""}
+                        ${temp_question.input6 ? `<p>Result 6: ${temp_question.result6} <br>Points: ${temp_question.output6_points}</p>` : ""}
+                        ${temp_question.colon_points ? `<p>Colon Check: ${temp_question.colon_result} <br>Colon Check Points: ${temp_question.colon_result_points}</p>` : ""}
+                        </div>
+                    </div>
                         <p>Auto-Grader: ${temp_question.autoGrade}</p>
                         <p>Final Grade: ${temp_question.grade}</p>
                     </div>
