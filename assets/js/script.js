@@ -3,6 +3,8 @@ var submit_btn = document.getElementById("submit-btn");
 var response_block = document.getElementById("response-block");
 var loading = document.getElementById("loading");
 
+var pre_url = "http://localhost:8080/";
+
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";
 }
@@ -39,7 +41,7 @@ function middleTest() {
     }
 
     const http = new XMLHttpRequest();
-    const url = 'api/middle_test.php';
+    const url = pre_url + 'api/middle_test.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -57,7 +59,7 @@ function unauthorizedTest() {
     var data = { "nontoken": "faild" };
 
     const http = new XMLHttpRequest();
-    const url = 'api/unauthorized.php';
+    const url = pre_url + 'api/unauthorized.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -87,7 +89,7 @@ login_form.addEventListener('submit', function (e) {
     }
 
     const http = new XMLHttpRequest();
-    const url = 'api/login.php';
+    const url = pre_url + 'api/login.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");

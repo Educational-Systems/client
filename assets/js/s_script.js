@@ -1,6 +1,8 @@
 var loading = document.getElementById("loading");
 var container = document.getElementById("container");
 
+var pre_url = "http://localhost:8080/";
+
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";
 }
@@ -278,7 +280,7 @@ function save_submission() {
     var data = { ...current_submission, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
-    var url = 'api/save_student_submission.php';
+    var url = pre_url + 'api/save_student_submission.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -317,7 +319,7 @@ function navigate(place, sup_data = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            var url = 'api/get_user.php';
+            var url = pre_url + 'api/get_user.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");

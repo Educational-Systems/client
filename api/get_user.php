@@ -5,6 +5,7 @@
     $ch = curl_init('https://web.njit.edu/~npm26/get_user.php'); // Test URL
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST"); // HTTP request method
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // Passing data to the request
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Disabling SSL check
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Whatever
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data))); // Setting necessary headers
 

@@ -1,6 +1,8 @@
 var loading = document.getElementById("loading");
 var container = document.getElementById("container");
 
+var pre_url = "http://localhost:8080/";
+
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";
 }
@@ -684,7 +686,7 @@ function add_student(value, ID, examID) {
         var data = { studentID: ID, examID: examID };
 
         const http = new XMLHttpRequest();
-        const url = 'api/enroll_student.php';
+        const url = pre_url + 'api/enroll_student.php';
 
         http.open("POST", url, true);
         http.setRequestHeader("Content-type", "application/json");
@@ -722,7 +724,7 @@ function save_exam() {
     var data = { ...current_exam, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
-    const url = 'api/save_exam.php';
+    const url = pre_url + 'api/save_exam.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -743,7 +745,7 @@ function save_question() {
     var data = { ...current_question, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
-    const url = 'api/save_question.php';
+    const url = pre_url + 'api/save_question.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -764,7 +766,7 @@ function save_submission() {
     var data = { ...current_submission, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
-    const url = 'api/save_teacher_submission.php';
+    const url = pre_url + 'api/save_teacher_submission.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -809,7 +811,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = 'api/get_user.php';
+            const url = pre_url + 'api/get_user.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
@@ -833,7 +835,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = 'api/get_exams.php';
+            const url = pre_url + 'api/get_exams.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
@@ -857,7 +859,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = 'api/get_questions.php';
+            const url = pre_url + 'api/get_questions.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
@@ -882,7 +884,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = 'api/get_questions.php';
+            const url = pre_url + 'api/get_questions.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
@@ -906,7 +908,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: localStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = 'api/get_questions.php';
+            const url = pre_url + 'api/get_questions.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
@@ -943,7 +945,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: localStorage.getItem("token"), examID: sup_data };
 
             const http = new XMLHttpRequest();
-            var url = 'api/get_exam_submissions.php';
+            var url = pre_url + 'api/get_exam_submissions.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
