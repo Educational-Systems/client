@@ -320,6 +320,9 @@ function get_exam_data() {
 
 function get_questions(id) {
     var result = "";
+    var priority = "";
+    var non_priority = "";
+
     for (var i = 0; i < filtered_questions_list.length; i++) {
         var temp_question = filtered_questions_list[i];
         var temp_status = id == 3 ? get_question_status(temp_question.ID) : null;
@@ -369,7 +372,7 @@ function get_questions(id) {
                 </div>`;
         }
 
-        result += `
+        var temp_result_data = `
         <div class="q-block">
 
             <div class="inner-q-block">
@@ -398,7 +401,17 @@ function get_questions(id) {
             ${id == 3 && is_applied ? innerResult : ``}
             
         </div>`;
+
+        if (id == 3 && is_applied) {
+            priority += temp_result_data;
+        } else {
+            non_priority += temp_result_data;
+        }
     }
+
+    result += priority;
+    result += non_priority;
+
     return result;
 }
 
