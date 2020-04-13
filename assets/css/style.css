@@ -206,6 +206,10 @@ a {
     width: 100%;
 }
 
+.q-header p {
+    margin-top: 2px;
+}
+
 .q-selection {
     width: 100%;
     display: flex;

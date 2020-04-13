@@ -416,6 +416,8 @@ function get_questions(id) {
 }
 
 function get_question_data() {
+    console.log(current_question);
+
     return `
             <div>
                 <div class="act-container">
@@ -459,7 +461,7 @@ function get_question_data() {
                 </div>
                 <div class="input textarea-input">
                     <label for="question_task">Task</label>
-                    <textarea name="question_task" placeholder="Type Question Task" value="${current_question ? current_question.task : ""}" onchange="change_question_field('task', this.value)"></textarea>
+                    <textarea name="question_task" placeholder="Type Question Task" onchange="change_question_field('task', this.value)">${current_question ? current_question.task : ""}</textarea>
                 </div>
 
                 <div class="act-container">
@@ -620,26 +622,26 @@ function get_submitted_questions() {
     return result;
 }
 
-function get_topics() {
-    var result = `<option value="0">None</option>`;
+function get_topics(isFilter = false) {
+    var result = `<option value="0" ${!isFilter && current_question.topicID == 0 ? `selected="selected"` : ""}>None</option>`;
     for (var i = 0; i < topics.length; i++) {
-        result += `<option value="${topics[i].id}">${topics[i].name}</option>`
+        result += `<option value="${Number(topics[i].id)}" ${!isFilter && current_question.topicID == Number(topics[i].id) ? `selected="selected"` : ""}>${topics[i].name}</option>`
     }
     return result;
 }
 
-function get_difficulties() {
-    var result = `<option value="0">None</option>`;
+function get_difficulties(isFilter = false) {
+    var result = `<option value="0" ${!isFilter && current_question.difficultyID == 0 ? `selected="selected"` : ""}>None</option>`;
     for (var i = 0; i < difficulties.length; i++) {
-        result += `<option value="${difficulties[i].id}">${difficulties[i].name}</option>`
+        result += `<option value="${Number(difficulties[i].id)}" ${!isFilter && current_question.difficultyID == Number(difficulties[i].id) ? `selected="selected"` : ""}>${difficulties[i].name}</option>`
     }
     return result;
 }
 
-function get_constraints() {
-    var result = `<option value="0">None</option>`;
+function get_constraints(isFilter = false) {
+    var result = `<option value="0" ${!isFilter && current_question.constraintID == 0 ? `selected="selected"` : ""}>None</option>`;
     for (var i = 0; i < constraints.length; i++) {
-        result += `<option value="${constraints[i].id}">${constraints[i].name}</option>`
+        result += `<option value="${Number(constraints[i].id)}" ${!isFilter && current_question.constraintID == Number(constraints[i].id) ? `selected="selected"` : ""}>${constraints[i].name}</option>`
     }
     return result;
 }
@@ -727,13 +729,13 @@ function get_filter(id) {
                 <div class="input">
                     <label for="difficultyID_filter">Difficulty</label>
                     <select id="difficultyID_filter" value="${current_filter ? Number(current_filter.difficultyID) : 0}" onchange="change_filter('difficultyID', this.value, ${id})">
-                        ${get_difficulties()}
+                        ${get_difficulties(true)}
                     </select>
                 </div>
                 <div class="input">
                     <label for="topicID_filter">Topic</label>
                     <select id="topicID_filter" value="${current_filter ? Number(current_filter.topicID) : 0}" onchange="change_filter('topicID', this.value, ${id})">
-                        ${get_topics()}
+                        ${get_topics(true)}
                     </select>
                 </div>
                 <div class="input">
