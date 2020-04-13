@@ -1,6 +1,7 @@
 var loading = document.getElementById("loading");
 var container = document.getElementById("container");
 var title_dom = document.getElementById("title");
+var footer_dom = document.getElementById("footer");
 
 var pre_url = "http://localhost:8080/";
 
@@ -832,6 +833,8 @@ function save_submission() {
 function navigate(place, sup_data = null, sup_data2 = null) {
     var title = "Home";
 
+    footer_dom.style = "display: none";
+
     switch (place) {
         case "log_out": {
             sessionStorage.removeItem("token");
@@ -1009,6 +1012,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             title = "Create Question";
             current_question = null;
             current_question = copy(new_question);
+            footer_dom.style = "display: block";
             container.innerHTML = question_create_view();
             break;
         }
@@ -1016,6 +1020,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             title = "Edit Question";
             current_question = null;
             current_question = questions_list[sup_data];
+            footer_dom.style = "display: block";
             container.innerHTML = question_edit_view();
             break;
         }
