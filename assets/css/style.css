@@ -193,6 +193,32 @@ a {
     padding: 10px;
 }
 
+.q-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.inner-q-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.q-selection {
+    width: 100%;
+    display: flex;
+}
+
+.q-selection>div {
+    margin-left: 10px;
+}
+
+.q-selection>div:first-child {
+    margin-left: 0px;
+}
+
 .e-block:first-child, .q-block:first-child {
     margin-top: 0px;
 }

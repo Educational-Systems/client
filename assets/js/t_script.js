@@ -310,10 +310,6 @@ function get_exam_data() {
                 </div>
                 </div>
 
-                <div class="q-selector" id="questions_list">
-                    ${get_questions_selector()}
-                </div>                
-
                 <div class="form-buttons">
                     <button class="button" onclick='save_exam()'>Save Exam</button>
                     <button class="button" onclick='navigate("exams")'>Cancel</button>
@@ -325,15 +321,81 @@ function get_exam_data() {
 function get_questions(id) {
     var result = "";
     for (var i = 0; i < filtered_questions_list.length; i++) {
+        var temp_question = filtered_questions_list[i];
+        var temp_status = id == 3 ? get_question_status(temp_question.ID) : null;
+        var is_applied = temp_status ? true : false;
+        var innerResult = ``;
+
+        if (id == 3) {
+            innerResult = `
+                <div class="q-selection">                
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Function Name</label>
+                        <input type="number" step="1" placeholder="For function name" onchange="change_points(this.value, ${temp_question.ID}, 'function_name_points')" value="${temp_status ? temp_status.function_name_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Constraint</label>
+                        <input type="number" step="1" placeholder="For constraint" onchange="change_points(this.value, ${temp_question.ID}, 'constraint_points')" value="${temp_status ? temp_status.constraint_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Colon</label>
+                        <input type="number" step="1" placeholder="For colon" onchange="change_points(this.value, ${temp_question.ID}, 'colon_points')" value="${temp_status ? temp_status.colon_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Test 1</label>
+                        <input type="number" step="1" placeholder="For Test 1" onchange="change_points(this.value, ${temp_question.ID}, 'output1_points')" value="${temp_status ? temp_status.output1_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Test 2</label>
+                        <input type="number" step="1" placeholder="For Test 2" onchange="change_points(this.value, ${temp_question.ID}, 'output2_points')" value="${temp_status ? temp_status.output2_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Test 3</label>
+                        <input type="number" step="1" placeholder="For Test 3" onchange="change_points(this.value, ${temp_question.ID}, 'output3_points')" value="${temp_status ? temp_status.output3_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Test 4</label>
+                        <input type="number" step="1" placeholder="For Test 4" onchange="change_points(this.value, ${temp_question.ID}, 'output4_points')" value="${temp_status ? temp_status.output4_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Test 5</label>
+                        <input type="number" step="1" placeholder="For Test 5" onchange="change_points(this.value, ${temp_question.ID}, 'output5_points')" value="${temp_status ? temp_status.output5_points : ""}" />
+                    </div>
+                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                        <label>Test 6</label>
+                        <input type="number" step="1" placeholder="For Test 6" onchange="change_points(this.value, ${temp_question.ID}, 'output6_points')" value="${temp_status ? temp_status.output6_points : ""}" />
+                    </div>
+                </div>`;
+        }
+
         result += `
         <div class="q-block">
-            <div class="q-header">
-                <h4>${filtered_questions_list[i].name}</h4>
-                <p>${filtered_questions_list[i].description}</p>
+
+            <div class="inner-q-block">
+                <div class="q-header">
+                    <h4>${filtered_questions_list[i].name}</h4>
+                    <p>${filtered_questions_list[i].description}</p>
+                </div>
+
+                ${id == 1 ? `
+
+                <div class="q-actions">
+                    <a class="new-button" onclick='navigate("question_edit", ${i})'>Edit Question</a>
+                </div>
+
+                `: ``}
+
+                ${id == 3 ? `
+
+                <div class="q-actions">
+                    <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_question(this.checked, ${temp_question.ID})">
+                </div>
+                
+                `: ``}
             </div>
-            ${id == 1 ? `<div class="q-actions">
-                <a class="new-button" onclick='navigate("question_edit", ${i})'>Edit Question</a>
-            </div>`: ``}
+
+            ${id == 3 && is_applied ? innerResult : ``}
+            
         </div>`;
     }
     return result;
@@ -655,7 +717,7 @@ function add_question(value, ID) {
         }
     }
 
-    document.getElementById("questions_list").innerHTML = get_questions_selector();
+    document.getElementById("questions-container3").innerHTML = get_questions(3);
 }
 
 function change_points(value, ID, field) {
@@ -751,7 +813,7 @@ function change_filter(field, value, id) {
         }
     }
 
-    document.getElementById("questions-container" + id).innerHTML = get_questions();
+    document.getElementById("questions-container" + id).innerHTML = get_questions(id);
 }
 
 function reset_filter(id) {
@@ -761,7 +823,7 @@ function reset_filter(id) {
     document.getElementById("difficultyID_filter").value = current_filter.difficultyID;
     document.getElementById("topicID_filter").value = current_filter.topicID;
     document.getElementById("keyword_filter").value = current_filter.keyword;
-    document.getElementById("questions-container" + id).innerHTML = get_questions();
+    document.getElementById("questions-container" + id).innerHTML = get_questions(id);
 }
 
 function save_exam() {
