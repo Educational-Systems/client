@@ -312,3 +312,7 @@ a {
 .points-block:first-child {
     margin-left: 0px;
 }
+
+.exam-grade-container {
+    margin-top: 20px;
+}

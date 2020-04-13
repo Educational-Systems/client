@@ -235,7 +235,7 @@ function exam_submission_view() {
     <div>
         <div>
             <h3>${current_exam.name} | ${current_submission.studentName}</h3>
-            <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
+            <h4 style="margin: 5px 0px;">Auto-Grader: ${current_submission.autoGrade}</h4>
             <p>${current_exam.description}</p>
         </div>
 
@@ -243,13 +243,15 @@ function exam_submission_view() {
             ${get_submitted_questions()}
         </div>
         
-        <div class="input">
-            <label for="final_grade">Final Grade:</label>
-            <input type="text" name="final_grade" placeholder="Type Final Grade" value="${current_submission ? current_submission.grade : ""}" onchange="change_submission_field('grade', this.value)" />
-        </div>
-        <div class="input">
-            <label for="submission_comments">Comments:</label>
-            <input type="text" name="submission_comments" placeholder="Type Submission Comments" value="${current_submission ? current_submission.comments : ""}" onchange="change_submission_field('comments', this.value)" />
+        <div class="exam-grade-container">
+            <div class="input">
+                <label for="final_grade">Final Grade:</label>
+                <input type="text" name="final_grade" placeholder="Type Final Grade" value="${current_submission ? current_submission.grade : ""}" onchange="change_submission_field('grade', this.value)" />
+            </div>
+            <div class="input">
+                <label for="submission_comments">Comments:</label>
+                <input type="text" name="submission_comments" placeholder="Type Submission Comments" value="${current_submission ? current_submission.comments : ""}" onchange="change_submission_field('comments', this.value)" />
+            </div>
         </div>
 
         <div class="form-buttons">
@@ -591,7 +593,7 @@ function get_submitted_questions() {
 
                 <div class="answer-header">
                     <h3>${temp_question_result.name}</h3>
-                    ${temp_question_result.description != null ? `<h4>${temp_question_result.description}</h4>` : ""}
+                    ${temp_question_result.description != null ? `<p style="margin-top: 5px;">${temp_question_result.description}</p>` : ""}
                     <p style="margin-top: 5px; margin-bottom: 5px;">${temp_question_result.task}</p>
                 </div>
 
