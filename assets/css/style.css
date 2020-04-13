@@ -299,3 +299,16 @@ a {
 .stud-list h3 {
     margin-bottom: 5px;
 }
+
+.points-container {
+    display: flex;
+    margin: 10px 0px;
+}
+
+.points-block {
+    margin-left: 20px;
+}
+
+.points-block:first-child {
+    margin-left: 0px;
+}

@@ -234,11 +234,10 @@ function exam_submission_view() {
     return `
     <div>
         <div>
-            <h3>${current_submission.studentName} | ${current_exam.name}</h3>
+            <h3>${current_exam.name} | ${current_submission.studentName}</h3>
             <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
             <p>${current_exam.description}</p>
         </div>
-        <br>
 
         <div class="submission-container">
             ${get_submitted_questions()}
@@ -582,31 +581,134 @@ function get_students() {
 }
 
 function get_submitted_questions() {
-    var result = "<h4>Questions:</h4>";
+    var result = "";
 
     for (var i = 0; i < current_submission.questions.length; i++) {
         var temp_question_result = current_submission.questions[i];
 
         result += `
             <div class="sq-block">
+
                 <div class="answer-header">
                     <h3>${temp_question_result.name}</h3>
-                    <h4>${temp_question_result.description}</h4>
-                    <p>${temp_question_result.task}</p>
+                    ${temp_question_result.description != null ? `<h4>${temp_question_result.description}</h4>` : ""}
+                    <p style="margin-top: 5px; margin-bottom: 5px;">${temp_question_result.task}</p>
                 </div>
+
                 <div class="answer">
                     <h4>Answer:</h4>
-                    <p>${temp_question_result.solution}</p>
-                    <p>Output 1: ${temp_question_result.result1}</p>
-                    <p>Output 2: ${temp_question_result.result2}</p>
-                    <p>Auto-Grader: ${temp_question_result.autoGrade}</p>
-                    <div class="input">
-                        <label>Grade</label>
-                        <input type="text" placeholder="Type Question Grade" value="${temp_question_result ? temp_question_result.grade : ""}" onchange="change_question_grade_field(${i}, 'grade', this.value)" />
+
+                    ${temp_question_result.solution != "" ? `<p style="margin-top: 5px; margin-bottom: 5px;">${temp_question_result.solution}</p>` : `<p style="margin-top: 5px; margin-bottom: 5px;">No Submitted Answer`}
+                    
+                    <hr>
+
+                    <div class="points-container">
+                        <div class="points-block">
+                        ${temp_question_result.input1 ? `<p>Input/Output 1: ${temp_question_result.input1} => ${temp_question_result.output1}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output1_points}</p>` : ""}
+                        ${temp_question_result.input2 ? `<p>Input/Output 2: ${temp_question_result.input2} => ${temp_question_result.output2}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output2_points}</p>` : ""}
+                        ${temp_question_result.function_name ? `<p>Function Name: ${temp_question_result.function_name}</p><p style="margin-bottom: 5px;"><b>Max Function Name Points:</b> ${temp_question_result.function_name_points}</p>` : ""}
+                        </div>
+                        <div class="points-block">
+                        ${temp_question_result.input3 ? `<p>Input/Output 3: ${temp_question_result.input3} => ${temp_question_result.output3}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output3_points}</p>` : ""}
+                        ${temp_question_result.input4 ? `<p>Input/Output 4: ${temp_question_result.input4} => ${temp_question_result.output4}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output4_points}</p>` : ""}
+                        ${temp_question_result.constraint ? `<p>Constraint: ${temp_question_result.constraint}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.constraint_points}</p>` : ""}
+                        </div>
+                        <div class="points-block">
+                        ${temp_question_result.input5 ? `<p>Input/Output 5: ${temp_question_result.input5} => ${temp_question_result.output5}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output5_points}</p>` : ""}
+                        ${temp_question_result.input6 ? `<p>Input/Output 6: ${temp_question_result.input6} => ${temp_question_result.output6}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output6_points}</p>` : ""}
+                        ${temp_question_result.colon_points ? `<p style="margin-bottom: 5px;"><b>Max Colon Points:</b> ${temp_question_result.colon_points}</p>` : ""}
+                        </div>
                     </div>
-                    <div class="input">
-                        <label>Comments</label>
-                        <input type="text" placeholder="Type Question Comments" value="${temp_question_result ? temp_question_result.comments : ""}" onchange="change_question_grade_field(${i}, 'comments', this.value)" />
+
+                    <hr>
+
+                    <div class="points-container">
+                        <div class="points-block">
+
+                        ${temp_question_result.input1 ? `<p>Output 1: ${temp_question_result.result1}</p>
+                        <div class="input">
+                            <label>Output 1 Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.result1_points : 0}" onchange="change_question_grade_field(${i}, 'result1_points', this.value)" />
+                        </div>
+                        ` : ""}
+
+                        ${temp_question_result.input2 ? `<p>Output 2: ${temp_question_result.result2}</p>
+                        <div class="input">
+                            <label>Output 2 Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.result2_points : 0}" onchange="change_question_grade_field(${i}, 'result2_points', this.value)" />
+                        </div>
+                        ` : ""}
+
+                        ${temp_question_result.function_name ? `<p>Function Name Check: ${temp_question_result.function_name_result}</p>
+                        <div class="input">
+                            <label>Function Name Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.function_name_result_points : 0}" onchange="change_question_grade_field(${i}, 'function_name_result_points', this.value)" />
+                        </div>
+                        ` : ""}
+
+                        </div>
+                        <div class="points-block">
+                        
+                        ${temp_question_result.input3 ? `<p>Output 3: ${temp_question_result.result3}</p>
+                        <div class="input">
+                            <label>Output 3 Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.result2_points : 0}" onchange="change_question_grade_field(${i}, 'result3_points', this.value)" />
+                        </div>
+                        ` : ""}
+                        
+                        ${temp_question_result.input4 ? `<p>Output 4: ${temp_question_result.result4}</p>
+                        <div class="input">
+                            <label>Output 4 Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.result4_points : 0}" onchange="change_question_grade_field(${i}, 'result4_points', this.value)" />
+                        </div>
+                        ` : ""}
+                                                
+                        ${temp_question_result.constraint ? `<p>Constraint Check: ${temp_question_result.constraint_result}</p>
+                        <div class="input">
+                            <label>Constraint Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.constraint_result_points : 0}" onchange="change_question_grade_field(${i}, 'constraint_result_points', this.value)" />
+                        </div>
+                        ` : ""}
+                        
+                        </div>
+                        
+                        <div class="points-block">
+
+                        ${temp_question_result.input5 ? `<p>Output 5: ${temp_question_result.result5}</p>
+                        <div class="input">
+                            <label>Output 5 Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.result5_points : 0}" onchange="change_question_grade_field(${i}, 'result5_points', this.value)" />
+                        </div>
+                        ` : ""}
+                        
+                        ${temp_question_result.input6 ? `<p>Output 6: ${temp_question_result.result6}</p>
+                        <div class="input">
+                            <label>Output 6 Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.result6_points : 0}" onchange="change_question_grade_field(${i}, 'result6_points', this.value)" />
+                        </div>
+                        ` : ""}
+                                                
+                        ${temp_question_result.colon_points ? `<p>Colon Check: ${temp_question_result.colon_result}</p>
+                        <div class="input">
+                            <label>Colon Points</label>
+                            <input type="text" placeholder="Type Points" value="${temp_question_result ? temp_question_result.colon_result_points : 0}" onchange="change_question_grade_field(${i}, 'colon_result_points', this.value)" />
+                        </div>
+                        ` : ""}
+                        
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="exam-grade-container">
+                        <div class="input">
+                            <label>Question Grade</label>
+                            <input type="text" placeholder="Type Question Grade" value="${temp_question_result ? temp_question_result.autoGrade : ""}" onchange="change_question_grade_field(${i}, 'grade', this.value)" />
+                        </div>
+                        <div class="input">
+                            <label>Comments</label>
+                            <input type="text" placeholder="Type Question Comments" value="${temp_question_result ? temp_question_result.comments : ""}" onchange="change_question_grade_field(${i}, 'comments', this.value)" />
+                        </div>
                     </div>
                 </div>
             </div>
