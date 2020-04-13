@@ -175,14 +175,27 @@ function questions_view() {
         <div class="act-container">
             <a class="new-button btn-action" onclick='navigate("question_create")'>Create Question</a>
             <div class="filter">
+            
+                <div class="input">
+                    <label for="difficultyID">Difficulty</label>
+                    <select id="difficultyID" value="${current_filter ? Number(current_filter.difficultyID) : 0}" onchange="change_filter('difficultyID', this.value, 1)">
+                        ${get_difficulties()}
+                    </select>
+                </div>
+                <div class="input">
+                    <label for="topicID">Topic</label>
+                    <select id="topicID" value="${current_filter ? Number(current_filter.topicID) : 0}" onchange="change_filter('topicID', this.value, 1)">
+                        ${get_topics()}
+                    </select>
+                </div>
                 <div class="input">
                     <label for="filter_keyword">Keyword</label>
-                    <input type="text" name="filter_keyword" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_question_field('output4', this.value)" />
+                    <input type="text" name="filter_keyword" id="filter_keyword" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_filter('keyword', this.value, 1)" />
                 </div>
-                <a class="new-button btn-action" onclick='reset_filter()'>Reset</a>
+                <a class="new-button btn-action" onclick='reset_filter(1)'>Reset</a>
             </div>
         </div>
-        <div class="q-container">
+        <div class="q-container" id="questions-container">
             ${get_questions()}
         </div>
     </div>
@@ -711,12 +724,48 @@ function change_question_grade_field(i, field, value) {
     current_submission.questions[i][field] = value;
 }
 
-function change_filter(field, value) {
+function change_filter(field, value, id) {
+    filtered_questions_list = [];
     current_filter[field] = value;
+
+    for (var i = 0; i < questions_list.length; i++) {
+        var topicCheck = true;
+        var difficultyCheck = true;
+        var keywordCheck = true;
+
+        if (questions_list[i].description.toLowerCase().indexOf(current_filter.keyword.toLowerCase()) == -1) {
+            keywordCheck = false;
+        }
+
+        if (questions_list[i].difficultyID != current_filter.difficultyID && current_filter.difficultyID != 0) {
+            difficultyCheck = false;
+        }
+
+        if (questions_list[i].topicID != current_filter.topicID && current_filter.topicID != 0) {
+            difficultyCheck = false;
+        }
+
+        if (topicCheck && difficultyCheck && keywordCheck) {
+            filtered_questions_list.push(questions_list[i]);
+        }
+    }
+
+    if (id == 1) {
+        document.getElementById("questions-container").innerHTML = get_questions();
+    }
 }
 
-function reset_filter() {
+function reset_filter(id) {
     current_filter = copy(new_filter);
+    filtered_questions_list = questions_list;
+
+    document.getElementById("difficultyID").value = current_filter.difficultyID;
+    document.getElementById("topicID").value = current_filter.topicID;
+    document.getElementById("filter_keyword").value = current_filter.keyword;
+    
+    if (id == 1) {
+        document.getElementById("questions-container").innerHTML = get_questions();
+    }
 }
 
 function save_exam() {
