@@ -1,5 +1,6 @@
 var loading = document.getElementById("loading");
 var container = document.getElementById("container");
+var title_dom = document.getElementById("title");
 
 var pre_url = "http://localhost:8080/";
 
@@ -287,13 +288,13 @@ function get_assignment_status(ID) {
 function home_view() {
     return `
     <div>
-        <h2>Home</h2>
-        <div>
-            <h4>Welcome ${current_user.full_name}!</h4>
-        </div>
-        <div class="nav-container">
-            <a onclick='navigate("exams")'>Exams</a>
-            <a onclick='navigate("questions")'>Questions</a>
+        <h2>Welcome ${current_user.full_name}!</h2>
+        <div class="block-body">
+            <h4>Please, select desired page:</h4>
+            <ul>
+                <li>For the exam creating, editing, assigning and grading, navigate to the "Exams" page.</li>
+                <li>For the question creating and editing, navigate to the "Questions" page.</li>
+            </ul>
         </div>
     </div>
     `;
@@ -302,10 +303,8 @@ function home_view() {
 function exams_view() {
     return `
     <div>
-        <h2>Exams</h2>
         <div class="act-container">
-            <a onclick='navigate("home")'>Go Home</a>
-            <a onclick='navigate("exam_create")'>Create Exam</a>
+            <a class="new-button btn-action" onclick='navigate("exam_create")'>Create Exam</a>
         </div>
         <div class="e-container">
             ${get_exams()}
@@ -317,10 +316,8 @@ function exams_view() {
 function questions_view() {
     return `
     <div>
-        <h2>Questions</h2>
         <div class="act-container">
-            <a onclick='navigate("home")'>Go Home</a>
-            <a onclick='navigate("question_create")'>Create Question</a>
+            <a class="new-button btn-action" onclick='navigate("question_create")'>Create Question</a>
         </div>
         <div class="q-container">
             ${get_questions()}
@@ -332,7 +329,6 @@ function questions_view() {
 function exam_create_view() {
     return `
     <div>
-        <h2>Create Exam</h2>
         ${get_exam_data()}
     </div>
     `;
@@ -341,7 +337,6 @@ function exam_create_view() {
 function exam_edit_view() {
     return `
     <div>
-        <h2>Edit Exam</h2>
         ${get_exam_data()}
     </div>
     `;
@@ -350,7 +345,6 @@ function exam_edit_view() {
 function question_create_view() {
     return `
     <div>
-        <h2>Create Question</h2>
         ${get_question_data()}
     </div>
     `;
@@ -359,7 +353,6 @@ function question_create_view() {
 function question_edit_view() {
     return `
     <div>
-        <h2>Edit Question</h2>
         ${get_question_data()}
     </div>
     `;
@@ -368,11 +361,6 @@ function question_edit_view() {
 function exam_submissions_view() {
     return `
     <div>
-        <h2>Exam Submissions</h2>
-        <div class="act-container">
-            <a onclick='go_back()'>Go Back</a>
-        </div>
-        <br>
         <div>
             <h3>${current_exam.name}</h3>
             <p>${current_exam.description}</p>
@@ -391,12 +379,6 @@ function exam_submissions_view() {
 function exam_submission_view() {
     return `
     <div>
-        <h2>Exam Submission</h2>
-        <div class="act-container">
-            <a onclick='go_back()'>Go Back</a>
-        </div>
-
-        <br>
         <div>
             <h3>${current_submission.studentName} | ${current_exam.name}</h3>
             <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
@@ -442,9 +424,8 @@ function get_exams() {
                 <p>${exams_list[i].description}</p>
             </div>
             <div class="e-actions">
-                <a onclick='navigate("exam_submissions", ${exams_list[i].id}, ${i})'>View Submissions</a>
-                <a onclick='navigate("exam_edit", ${i})'>Edit Exam</a>
-                <a>Delete Exam</a>
+                <a class="new-button" onclick='navigate("exam_submissions", ${exams_list[i].id}, ${i})'>View Submissions</a>
+                <a class="new-button" onclick='navigate("exam_edit", ${i})'>Edit Exam</a>
             </div>
         </div>
         `;
@@ -491,8 +472,7 @@ function get_questions() {
                 <p>${questions_list[i].description}</p>
             </div>
             <div class="q-actions">
-                <a onclick='navigate("question_edit", ${i})'>Edit Question</a>
-                <a>Delete Question</a>
+                <a class="new-button" onclick='navigate("question_edit", ${i})'>Edit Question</a>
             </div>
         </div>
         `;
@@ -580,7 +560,7 @@ function get_submissions() {
                     <p>${current_submissions[i].comments}</p>
                 </div>
                 <div class="s-actions">
-                    <a onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
+                    <a class="new-button" onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
                 </div>
                 <br>
             </div>
@@ -720,7 +700,6 @@ function change_question_grade_field(i, field, value) {
 }
 
 function save_exam() {
-    console.log(current_exam);
     var data = { ...current_exam, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
@@ -732,8 +711,6 @@ function save_exam() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            //var result = JSON.parse(http.responseText);
-            //console.log(result);
             toggle_loading(false);
             navigate("exams");
         }
@@ -741,7 +718,6 @@ function save_exam() {
 }
 
 function save_question() {
-    console.log(current_question);
     var data = { ...current_question, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
@@ -753,8 +729,6 @@ function save_question() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            //var result = JSON.parse(http.responseText);
-            //console.log(result);
             toggle_loading(false);
             navigate("questions");
         }
@@ -762,7 +736,6 @@ function save_question() {
 }
 
 function save_submission() {
-    console.log(current_submission);
     var data = { ...current_submission, token: localStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
@@ -774,10 +747,7 @@ function save_submission() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            //var result = JSON.parse(http.responseText);
-            //console.log(result);
             toggle_loading(false);
-            nav_history.splice(nav_history.length - 1, 1);
             navigate("exam_submissions", current_exam.ID);
         }
     }
@@ -790,22 +760,12 @@ function save_submission() {
 
 /* ------------> Navigation ------------> */
 
-var nav_history = [];
-
 function navigate(place, sup_data = null, sup_data2 = null) {
-    nav_history.push(place);
-
-    if (place != "exam_submission" && place != "exam_submissions") {
-        /*current_exam = null;
-        current_question = null;
-        current_submissions = null;
-        current_submission = null;*/
-    }
+    var title = "Home";
 
     switch (place) {
         case "home": {
-            nav_history = ["home"];
-
+            title = "Home";
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -830,6 +790,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exams": {
+            title = "Exams";
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -854,6 +815,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "questions": {
+            title = "Questions";
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -877,6 +839,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exam_create": {
+            title = "Create Exam";
             current_exam = null;
 
             toggle_loading(true);
@@ -903,6 +866,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exam_edit": {
+            title = "Edit Exam";
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token") };
@@ -921,25 +885,27 @@ function navigate(place, sup_data = null, sup_data2 = null) {
 
                     toggle_loading(false);
                     current_exam = exams_list[sup_data];
-                    console.log(current_exam);
                     container.innerHTML = exam_edit_view();
                 }
             }
             break;
         }
         case "question_create": {
+            title = "Create Question";
             current_question = null;
             current_question = copy(new_question);
             container.innerHTML = question_create_view();
             break;
         }
         case "question_edit": {
+            title = "Edit Question";
             current_question = null;
             current_question = questions_list[sup_data];
             container.innerHTML = question_edit_view();
             break;
         }
         case "exam_submissions": {
+            title = "Exam Submissions";
             toggle_loading(true);
 
             var data = { token: localStorage.getItem("token"), examID: sup_data };
@@ -970,7 +936,6 @@ function navigate(place, sup_data = null, sup_data2 = null) {
 
                             toggle_loading(false);
                             current_submission = null;
-                            console.log(data);
 
                             if (data != null) {
                                 var ex_id = 0;
@@ -982,7 +947,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                                     }
                                 }
 
-                                current_exam = exams_list[ex_id]; //BACK HERE!
+                                current_exam = exams_list[ex_id];
                                 current_submissions = submissions_list;
                             }
 
@@ -994,17 +959,13 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             break;
         }
         case "exam_submission": {
+            title = "Exam Submission";
             current_submission = current_submissions[sup_data];
             container.innerHTML = exam_submission_view();
             break;
         }
     }
-}
-
-function go_back() {
-    var location = nav_history[nav_history.length - 2];
-    nav_history.splice(nav_history.length - 2);
-    navigate(location);
+    title_dom.innerText = title;
 }
 
 /* <------------ Navigation <------------ */
