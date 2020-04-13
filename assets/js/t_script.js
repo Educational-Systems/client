@@ -256,7 +256,7 @@ function exam_submission_view() {
 
         <div class="form-buttons">
             <button class="button" onclick='save_submission()'>Grade Exam</button>
-            <button class="button" onclick='go_back()'>Cancel</button>
+            <button class="button" onclick='navigate("exams")'>Cancel</button>
         </div>
     </div>
     `;
@@ -705,7 +705,7 @@ function get_submitted_questions() {
                     <div class="exam-grade-container">
                         <div class="input">
                             <label>Question Grade</label>
-                            <input type="text" placeholder="Type Question Grade" value="${temp_question_result ? temp_question_result.autoGrade : ""}" onchange="change_question_grade_field(${i}, 'grade', this.value)" />
+                            <input type="text" placeholder="Type Question Grade" value="${temp_question_result ? temp_question_result.grade : ""}" onchange="change_question_grade_field(${i}, 'grade', this.value)" />
                         </div>
                         <div class="input">
                             <label>Comments</label>
@@ -932,7 +932,7 @@ function save_submission() {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             toggle_loading(false);
-            navigate("exam_submissions", current_exam.ID);
+            navigate("exams");
         }
     }
 }
