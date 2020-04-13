@@ -33,20 +33,20 @@ function copy(obj1) {
 }
 
 /* ------------> State Variables ------------> */
-var current_user = {
-    "full_name": "Theodore Nicholson",
-    "first_name": "Theodore",
-    "last_name": "Nicholson",
-    "email": "teacher@test.com",
-    "type": "1",
-    "type_string": "teacher",
-    "token": "teach_token"
-}
+var current_user = null;
+
+var topics = [];
+var difficulties = [];
+var constraints = [];
 
 var current_exam = null;
 var current_question = null;
 var current_submissions = null;
 var current_submission = null;
+
+var exams_list = [];
+var students_list = [];
+var submissions_list = [];
 
 var new_exam = {
     "name": "",
@@ -82,171 +82,6 @@ var new_sub_question = {
     "grade": 0,
     "comments": ""
 }
-
-var exams_list = [
-    {
-        "name": "Exam 1",
-        "description": "This is Exam 1",
-        "questions": [
-            {
-                "questionID": 1,
-                "points": 20
-            }
-        ],
-        "ID": 1
-    },
-    {
-        "name": "Exam 2",
-        "description": "This is Exam 2",
-        "questions": [
-            {
-                "questionID": 2,
-                "points": 10
-            },
-            {
-                "questionID": 3,
-                "points": 10
-            }
-        ],
-        "ID": 2
-    },
-    {
-        "name": "Exam 3",
-        "description": "This is Exam 3",
-        "questions": [
-            {
-                "questionID": 2,
-                "points": 20
-            }
-        ],
-        "ID": 3
-    }
-]
-
-var questions_list = [
-    {
-        "name": "Q1",
-        "description": "This is Question 1: addition.",
-        "task": "Created function 'add' which will output the sum of two numbers.",
-        "input1": "10, 20",
-        "output1": "30",
-        "input2": "-1, 2",
-        "output2": "1",
-        "ID": 1
-    },
-    {
-        "name": "Q2",
-        "description": "This is Question 2: multiplication.",
-        "task": "Created function 'mult' which will output the multiplication of two numbers.",
-        "input1": "2, 5",
-        "output1": "10",
-        "input2": "3, 7",
-        "output2": "21",
-        "ID": 2
-    },
-    {
-        "name": "Q3",
-        "description": "This is Question 3: power.",
-        "task": "Created function 'pow' which will output number to the power of 2.",
-        "input1": "4",
-        "output1": "16",
-        "input2": "4",
-        "output2": "16",
-        "ID": 3
-    }
-]
-
-var students_list = [
-    {
-        "name": "Dzmitry",
-        "ID": 1
-    },
-    {
-        "name": "Noah",
-        "ID": 2
-    },
-    {
-        "name": "David",
-        "ID": 3
-    }
-]
-
-var submissions_list = [
-    [
-        {
-            "studentName": "Dzmitry",
-            "studentID": 1,
-            "status": 2,
-            "autoGrade": 20,
-            "grade": 20,
-            "comments": "Well done!",
-            "ID": 1,
-            "questions": [
-                {
-                    "questionID": 1,
-                    "solution": "def add(a,b): return a + b",
-                    "result1": "30",
-                    "result2": "1",
-                    "autoGrade": 20,
-                    "grade": 20,
-                    "comments": "Task well done!"
-                }
-            ]
-        },
-        {
-            "studentName": "Noah",
-            "studentID": 2,
-            "status": 0,
-            "autoGrade": 0,
-            "grade": 0,
-            "comments": "",
-            "ID": 2,
-            "questions": [
-                {
-                    "questionID": 1,
-                    "solution": "",
-                    "result1": "",
-                    "result2": "",
-                    "autoGrade": 0,
-                    "grade": 0,
-                    "comments": ""
-                }
-            ]
-        }
-    ],
-    [
-        {
-            "studentName": "Noah",
-            "studentID": 2,
-            "status": 0,
-            "autoGrade": 0,
-            "grade": 0,
-            "comments": "",
-            "ID": 2,
-            "questions": [
-                {
-                    "questionID": 2,
-                    "solution": "",
-                    "result1": "",
-                    "result2": "",
-                    "autoGrade": 0,
-                    "grade": 0,
-                    "comments": ""
-                },
-                {
-                    "questionID": 3,
-                    "solution": "",
-                    "result1": "",
-                    "result2": "",
-                    "autoGrade": 0,
-                    "grade": 0,
-                    "comments": ""
-                }
-            ]
-        }
-    ],
-    []
-]
 
 function get_question_by_ID(ID) {
     for (var i = 0; i < questions_list.length; i++) {
@@ -700,7 +535,7 @@ function change_question_grade_field(i, field, value) {
 }
 
 function save_exam() {
-    var data = { ...current_exam, token: localStorage.getItem("token") };
+    var data = { ...current_exam, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
     const url = pre_url + 'api/save_exam.php';
@@ -718,7 +553,7 @@ function save_exam() {
 }
 
 function save_question() {
-    var data = { ...current_question, token: localStorage.getItem("token") };
+    var data = { ...current_question, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
     const url = pre_url + 'api/save_question.php';
@@ -736,7 +571,7 @@ function save_question() {
 }
 
 function save_submission() {
-    var data = { ...current_submission, token: localStorage.getItem("token") };
+    var data = { ...current_submission, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
     const url = pre_url + 'api/save_teacher_submission.php';
@@ -764,11 +599,15 @@ function navigate(place, sup_data = null, sup_data2 = null) {
     var title = "Home";
 
     switch (place) {
+        case "log_out": {
+            sessionStorage.removeItem("token");
+            window.location.href = "index.html";
+        }
         case "home": {
             title = "Home";
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token") };
+            var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
             const url = pre_url + 'api/get_user.php';
@@ -793,7 +632,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             title = "Exams";
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token") };
+            var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
             const url = pre_url + 'api/get_exams.php';
@@ -818,7 +657,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             title = "Questions";
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token") };
+            var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
             const url = pre_url + 'api/get_questions.php';
@@ -844,7 +683,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
 
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token") };
+            var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
             const url = pre_url + 'api/get_questions.php';
@@ -869,7 +708,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             title = "Edit Exam";
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token") };
+            var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
             const url = pre_url + 'api/get_questions.php';
@@ -908,7 +747,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             title = "Exam Submissions";
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token"), examID: sup_data };
+            var data = { token: sessionStorage.getItem("token"), examID: sup_data };
 
             const http = new XMLHttpRequest();
             var url = pre_url + 'api/get_exam_submissions.php';
@@ -922,7 +761,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                     var result = JSON.parse(http.responseText);
                     submissions_list = result;
 
-                    data = { token: localStorage.getItem("token") };
+                    data = { token: sessionStorage.getItem("token") };
                     url = 'api/get_students.php';
 
                     http.open("POST", url, true);

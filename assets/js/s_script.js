@@ -277,7 +277,7 @@ function change_question_solution_field(i, field, value) {
 
 function save_submission() {
     console.log(current_submission);
-    var data = { ...current_submission, token: localStorage.getItem("token") };
+    var data = { ...current_submission, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
     var url = pre_url + 'api/save_student_submission.php';
@@ -316,7 +316,7 @@ function navigate(place, sup_data = null) {
 
             toggle_loading(true);
 
-            var data = { token: localStorage.getItem("token") };
+            var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
             var url = pre_url + 'api/get_user.php';
@@ -330,7 +330,7 @@ function navigate(place, sup_data = null) {
                     var result = JSON.parse(http.responseText);
                     current_user = result;
 
-                    data = { token: localStorage.getItem("token") };
+                    data = { token: sessionStorage.getItem("token") };
                     url = 'api/get_user_exams.php';
 
                     http.open("POST", url, true);

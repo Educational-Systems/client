@@ -99,7 +99,7 @@ login_form.addEventListener('submit', function (e) {
         if (this.readyState == 4 && this.status == 200) {
             var result = JSON.parse(http.responseText)
             console.log(result);
-            localStorage.setItem("token", result.token);
+            sessionStorage.setItem("token", result.token);
             if (result.type == 1) {
                 window.location.href = "teacher.html";
                 toggle_loading(false);
