@@ -547,7 +547,7 @@ function get_submissions() {
             <div class="s-block">
                 <div class="s-header">
                     <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
-                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final.</p>
+                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final</p>
                     <p>${current_submissions[i].comments}</p>
                 </div>
                 <div class="s-actions">

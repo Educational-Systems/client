@@ -1,5 +1,6 @@
 var loading = document.getElementById("loading");
 var container = document.getElementById("container");
+var title_dom = document.getElementById("title");
 
 var pre_url = "";
 
@@ -36,152 +37,13 @@ var current_submissions = null;
 var current_submission = null;
 
 
-var submissions_list = [
-    {
-        "studentName": "Dzmitry",
-        "examID": 1,
-        "examName": "This is exam name.",
-        "examDescription": "This is exam Description.",
-        "studentID": 1,
-        "status": 2,
-        "autoGrade": 20,
-        "grade": 20,
-        "comments": "Well done!",
-        "ID": 1,
-        "questions": [
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 20,
-                "comments": "Task well done!",
-                "ID": 1
-            },
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 20,
-                "comments": "Task well done!",
-                "ID": 1
-            },
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 20,
-                "comments": "Task well done!",
-                "ID": 1
-            }
-        ]
-    },
-    {
-        "studentName": "Dzmitry",
-        "examID": 1,
-        "examName": "This is exam name.",
-        "examDescription": "This is exam Description.",
-        "studentID": 1,
-        "status": 0,
-        "autoGrade": 0,
-        "grade": 0,
-        "comments": "",
-        "ID": 2,
-        "questions": [
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "",
-                "result1": "",
-                "result2": "",
-                "autoGrade": 0,
-                "grade": 0,
-                "comments": "",
-                "ID": 1
-            }
-        ]
-    },
-    {
-        "studentName": "Dzmitry",
-        "examID": 1,
-        "examName": "This is exam name.",
-        "examDescription": "This is exam Description.",
-        "studentID": 1,
-        "status": 1,
-        "autoGrade": 20,
-        "grade": 0,
-        "comments": "",
-        "ID": 2,
-        "questions": [
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 0,
-                "comments": "",
-                "ID": 1
-            },
-            {
-                "name": "Q1",
-                "description": "This is Question 1: addition.",
-                "task": "Created function 'add' which will output the sum of two numbers.",
-                "input1": "10, 20",
-                "output1": "30",
-                "input2": "-1, 2",
-                "output2": "1",
-                "solution": "def add(a,b): return a + b",
-                "result1": "30",
-                "result2": "1",
-                "autoGrade": 20,
-                "grade": 20,
-                "comments": "Task well done!",
-                "ID": 1
-            }
-        ]
-    }
-]
+var submissions_list = []
 
 
 function home_view() {
     return `
     <div>
-        <h2>Exams</h2>
+        <h2>Assigned Exams:</h2>
         <div class="e-container">
             ${get_submissions()}
         </div>
@@ -192,15 +54,13 @@ function home_view() {
 function exam_submission_view() {
     return `
     <div>
-        <h2>Exam Submission</h2>
-        <br>
+        <h2>Exam Submission:</h2>
         <div>
-            <h3>${current_submission.studentName} | ${current_submission.examName}</h3>
+            <h3>${current_submission.examName}</h3>
             <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
             <h4>Grade: ${current_submission.grade}</h4>
             <p>${current_submission.examDescription}</p>
         </div>
-        <br>
 
         <div class="submission-container">
             ${get_submitted_questions()}
@@ -215,20 +75,19 @@ function exam_submission_view() {
 }
 
 function get_submissions() {
-    var result = "<h4>Assigned Exams:</h4>";
+    var result = "";
 
     for (var i = 0; i < current_submissions.length; i++) {
         result += `
             <div class="s-block">
                 <div class="s-header">
-                    <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
-                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final.</p>
+                    <h4>${current_submissions[i].examName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
+                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final</p>
                     <p>${current_submissions[i].comments}</p>
                 </div>
                 <div class="s-actions">
-                    <a onclick='navigate("exam_submission", ${i})'>${current_submissions[i].status == 0 ? "Take Exam" : (current_submissions[i].status == 1) ? "View Submission" : "View Grade"}</a>
+                    <a class="new-button" onclick='navigate("exam_submission", ${i})'>${current_submissions[i].status == 0 ? "Take Exam" : (current_submissions[i].status == 1) ? "View Submission" : "View Grade"}</a>
                 </div>
-                <br>
             </div>
         `;
     }
@@ -236,8 +95,66 @@ function get_submissions() {
     return result;
 }
 
+/*
+name: "While Loop"
+description: null
+task: "Create function get_all which will get all"
+solution: ""
+function_name: "test"
+function_name_points: "0"
+constraint: "for"
+constraint_points: "0"
+colon_points: "0"
+input1: "1"
+input2: "1"
+input3: "1"
+input4: "1"
+input5: "1"
+input6: "1"
+output1: "1"
+output2: "1"
+output3: "1"
+output4: "1"
+output5: "1"
+output6: "1"
+result1: ""
+result2: ""
+result3: ""
+result4: ""
+result5: ""
+result6: ""
+function_name_result: ""
+colon_result: ""
+constraint_result: ""
+output1_points: ""
+output2_points: ""
+output3_points: ""
+output4_points: ""
+output5_points: ""
+output6_points: ""
+result1_points: "0"
+result2_points: "0"
+result3_points: "0"
+result4_points: "0"
+result5_points: "0"
+result6_points: "0"
+function_name_result_points: "0"
+colon_result_points: "0"
+constraint_result_points: "0"
+autoGrade: "0"
+grade: "0"
+comments: ""
+ID: "28"
+output1_result: null
+output2_result: null
+output3_result: null
+output4_result: null
+output5_result: null
+output6_result: null
+*/
+
 function get_submitted_questions() {
-    var result = "<h4>Questions:</h4>";
+    var result = "";
 
     for (var i = 0; i < current_submission.questions.length; i++) {
         var temp_question = current_submission.questions[i];
@@ -245,10 +162,29 @@ function get_submitted_questions() {
             <div class="s-block">
                 <div class="answer-header">
                     <h3>${temp_question.name}</h3>
-                    <h4>${temp_question.description}</h4>
-                    <p>${temp_question.task}</p>
-                    <p>Input/Output 1: ${temp_question.input1} => ${temp_question.output1}</p>
-                    <p>Input/Output 2: ${temp_question.input2} => ${temp_question.output2}</p>
+
+                    ${temp_question.description != null ? `<h4>${temp_question.description}</h4>` : ""}
+
+                    <p style="margin-top: 5px; margin-bottom: 5px;">${temp_question.task}</p>
+
+                    <div class="points-container">
+                        <div class="points-block">
+                        ${temp_question.input1 ? `<p>Input/Output 1: ${temp_question.input1} => ${temp_question.output1} <br>Points: ${temp_question.output1_points}</p>` : ""}
+                        ${temp_question.input2 ? `<p>Input/Output 2: ${temp_question.input2} => ${temp_question.output2} <br>Points: ${temp_question.output2_points}</p>` : ""}
+                        ${temp_question.function_name ? `<p>Function Name: ${temp_question.function_name} <br>Points: ${temp_question.function_name_points}</p>` : ""}
+                        </div>
+                        <div class="points-block">
+                        ${temp_question.input3 ? `<p>Input/Output 3: ${temp_question.input3} => ${temp_question.output3} <br>Points: ${temp_question.output3_points}</p>` : ""}
+                        ${temp_question.input4 ? `<p>Input/Output 4: ${temp_question.input4} => ${temp_question.output4} <br>Points: ${temp_question.output4_points}</p>` : ""}
+                        ${temp_question.constraint ? `<p>Constraint: ${temp_question.constraint} <br>Points: ${temp_question.constraint_points}</p>` : ""}
+                        </div>
+                        <div class="points-block">
+                        ${temp_question.input5 ? `<p>Input/Output 5: ${temp_question.input5} => ${temp_question.output5} <br>Points: ${temp_question.output5_points}</p>` : ""}
+                        ${temp_question.input6 ? `<p>Input/Output 6: ${temp_question.input6} => ${temp_question.output6} <br>Points: ${temp_question.output6_points}</p>` : ""}
+                        ${temp_question.colon_points ? `<p>Colon Points: ${temp_question.colon_points}</p>` : ""}
+                        </div>
+                    </div>
+                
                 </div>
                 <div class="answer">
                     <div class="input" style="${current_submission.status != 0 ? "display: none;" : ""}">
@@ -263,7 +199,6 @@ function get_submitted_questions() {
                         <p>Final Grade: ${temp_question.grade}</p>
                     </div>
                 </div>
-                <br>
             </div>
         `;
     }
@@ -301,6 +236,7 @@ function save_submission() {
 var nav_history = [];
 
 function navigate(place, sup_data = null) {
+    var title = "Home";
     nav_history.push(place);
 
     if (place != "exam_submission" && place != "exam_submissions") {
@@ -311,7 +247,12 @@ function navigate(place, sup_data = null) {
     }
 
     switch (place) {
+        case "log_out": {
+            sessionStorage.removeItem("token");
+            window.location.href = "index.html";
+        }
         case "home": {
+            title = "Home";
             nav_history = ["home"];
 
             toggle_loading(true);
@@ -351,11 +292,14 @@ function navigate(place, sup_data = null) {
             break;
         }
         case "exam_submission": {
+            title = "Exam Submission";
             current_submission = current_submissions[sup_data];
             container.innerHTML = exam_submission_view();
             break;
         }
     }
+
+    title_dom.innerText = title;
 }
 
 function go_back() {
