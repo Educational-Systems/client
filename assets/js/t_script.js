@@ -58,10 +58,22 @@ var new_question = {
     "name": "",
     "description": "",
     "task": "",
+    "function_name": "",
+    "topicID": 0,
+    "difficultyID": 0,
+    "constraintID": 0,
     "input1": "",
     "output1": "",
     "input2": "",
-    "output2": ""
+    "output2": "",
+    "input3": "",
+    "output3": "",
+    "input4": "",
+    "output4": "",
+    "input5": "",
+    "output5": "",
+    "input6": "",
+    "output6": ""
 }
 
 var new_submission = {
@@ -342,8 +354,9 @@ function get_questions_selector() {
 function get_question_data() {
     return `
             <div>
-                <br>
-                <h4>Question Information:</h4>
+                <div class="act-container">
+                    <h3>Question Information:</h3>
+                </div>
                 <div class="input">
                     <label for="question_name">Name</label>
                     <input type="text" name="question_name" placeholder="Type Question Name" value="${current_question ? current_question.name : ""}" onchange="change_question_field('name', this.value)" />
