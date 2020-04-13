@@ -65,9 +65,10 @@ a {
     color: gray;
     margin-bottom: 5px;
     padding: 0px 2px;
+    font-weight: bold;
 }
 
-.input input {
+.input input, .input textarea, .input select {
     font-size: 15px;
     height: 30px;
     width: 100%;
@@ -77,7 +78,13 @@ a {
     padding: 0px 2px;
 }
 
-.input input:focus {
+.input textarea {
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 30px;
+}
+
+.input input:focus, .input textarea:focus, .input select:focus {
     border-bottom: 1px solid rgba(0, 0, 0, 1);
 }
 
@@ -173,8 +180,8 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    border: 1px solid rgba(0, 0, 0, .12);
+    margin-top: 10px;
+    border: 1px solid rgb(228, 228, 228);
     box-shadow: 0 0 0 0 rgba(0, 0, 0, .2), 0 0 0 0 rgba(0, 0, 0, .14), 0 0 0 0 rgba(0, 0, 0, .12);
     border-radius: 5px;
     padding: 10px;
@@ -199,7 +206,7 @@ a {
     justify-content: center;
     cursor: pointer;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, .12);
+    border: 1px solid rgb(255, 172, 51);
     border-radius: 5px;
     padding: 8px 17px;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, .2), 0 0 0 0 rgba(0, 0, 0, .14), 0 0 0 0 rgba(0, 0, 0, .12);
@@ -213,4 +220,29 @@ a {
 
 .btn-action {
     border: 1px solid rgb(255, 172, 51);
+}
+
+.tests-container, .general-container {
+    display: flex;
+    overflow-x: scroll;
+    margin-bottom: 20px;
+}
+
+.general-container {
+    overflow-x: hidden;
+    margin-bottom: 0px;
+}
+
+.test-block, .general-block {
+    margin-left: 10px;
+}
+
+.test-block:first-child, .general-block:first-child {
+    margin-left: 0px;
+}
+
+.textarea-input {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
 }

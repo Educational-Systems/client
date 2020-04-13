@@ -283,9 +283,11 @@ function get_exams() {
 function get_exam_data() {
     return `
             <div>
-                <br>
-                <h4>Exam Information:</h4>
-
+                <div class="act-container">
+                    <h3>General Information:</h3>
+                </div>
+                <div class="general-container">
+                <div class="general-block">
                 <div class="input">
                     <label for="exam_name">Name</label>
                     <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
@@ -294,8 +296,8 @@ function get_exam_data() {
                     <label for="exam_description">Description</label>
                     <input type="text" name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
                 </div>
-
-                <br>
+                </div>
+                </div>
 
                 <div class="q-selector" id="questions_list">
                     ${get_questions_selector()}
@@ -355,20 +357,54 @@ function get_question_data() {
     return `
             <div>
                 <div class="act-container">
-                    <h3>Question Information:</h3>
+                    <h3>General Information:</h3>
                 </div>
+                <div class="general-container">
+                <div class="general-block">
                 <div class="input">
                     <label for="question_name">Name</label>
                     <input type="text" name="question_name" placeholder="Type Question Name" value="${current_question ? current_question.name : ""}" onchange="change_question_field('name', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_description">Description</label>
+                    <label for="question_description">Short Description</label>
                     <input type="text" name="question_description" placeholder="Type Question Description" value="${current_question ? current_question.description : ""}" onchange="change_question_field('description', this.value)" />
                 </div>
                 <div class="input">
-                    <label for="question_task">Task</label>
-                    <input type="text" name="question_task" placeholder="Type Question Task" value="${current_question ? current_question.task : ""}" onchange="change_question_field('task', this.value)" />
+                    <label for="difficultyID">Difficulty</label>
+                    <select id="difficultyID" value="${current_question ? current_question.difficultyID : ""}" onchange="change_question_field('difficultyID', this.value)">
+                        ${get_difficulties()}
+                    </select>
                 </div>
+                </div>
+                <div class="general-block">
+                <div class="input">
+                    <label for="topicID">Topic</label>
+                    <select id="topicID" value="${current_question ? current_question.topicID : ""}" onchange="change_question_field('topicID', this.value)">
+                        ${get_topics()}
+                    </select>
+                </div>
+                <div class="input">
+                    <label for="constraintID">Constraint</label>
+                    <select id="constraintID" value="${current_question ? current_question.constraintID : ""}" onchange="change_question_field('constraintID', this.value)">
+                        ${get_constraints()}
+                    </select>
+                </div>
+                <div class="input">
+                    <label for="function_name">Function Name</label>
+                    <input type="text" name="function_name" placeholder="Type Function Name" value="${current_question ? current_question.function_name : ""}" onchange="change_question_field('function_name', this.value)" />
+                </div>
+                </div>
+                </div>
+                <div class="input textarea-input">
+                    <label for="question_task">Task</label>
+                    <textarea name="question_task" placeholder="Type Question Task" value="${current_question ? current_question.task : ""}" onchange="change_question_field('task', this.value)"></textarea>
+                </div>
+
+                <div class="act-container">
+                    <h3>Test Cases:</h3>
+                </div>
+                <div class="tests-container">
+                <div class="test-block">
                 <div class="input">
                     <label for="question_input1">Input 1</label>
                     <input type="text" name="question_input1" placeholder="Type Question Input 1" value="${current_question ? current_question.input1 : ""}" onchange="change_question_field('input1', this.value)" />
@@ -377,6 +413,9 @@ function get_question_data() {
                     <label for="question_output1">Output 1</label>
                     <input type="text" name="question_output1" placeholder="Type Question Output 1" value="${current_question ? current_question.output1 : ""}" onchange="change_question_field('output1', this.value)" />
                 </div>
+                </div>
+                
+                <div class="test-block">
                 <div class="input">
                     <label for="question_input2">Input 2</label>
                     <input type="text" name="question_input2" placeholder="Type Question Input 2" value="${current_question ? current_question.input2 : ""}" onchange="change_question_field('input2', this.value)" />
@@ -385,12 +424,56 @@ function get_question_data() {
                     <label for="question_output2">Output 2</label>
                     <input type="text" name="question_output2" placeholder="Type Question Output 2" value="${current_question ? current_question.output2 : ""}" onchange="change_question_field('output2', this.value)" />
                 </div>
-
-                <br>
+                </div>
+                
+                <div class="test-block">
+                <div class="input">
+                    <label for="question_input3">Input 3</label>
+                    <input type="text" name="question_input3" placeholder="Type Question Input 3" value="${current_question ? current_question.input3 : ""}" onchange="change_question_field('input3', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_output3">Output 3</label>
+                    <input type="text" name="question_output3" placeholder="Type Question Output 3" value="${current_question ? current_question.output3 : ""}" onchange="change_question_field('output3', this.value)" />
+                </div>
+                </div>
+                
+                <div class="test-block">
+                <div class="input">
+                    <label for="question_input4">Input 4</label>
+                    <input type="text" name="question_input4" placeholder="Type Question Input 4" value="${current_question ? current_question.input4 : ""}" onchange="change_question_field('input4', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_output4">Output 4</label>
+                    <input type="text" name="question_output4" placeholder="Type Question Output 4" value="${current_question ? current_question.output4 : ""}" onchange="change_question_field('output4', this.value)" />
+                </div>
+                </div>
+                
+                <div class="test-block">
+                <div class="input">
+                    <label for="question_input5">Input 5</label>
+                    <input type="text" name="question_input5" placeholder="Type Question Input 5" value="${current_question ? current_question.input5 : ""}" onchange="change_question_field('input5', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_output5">Output 5</label>
+                    <input type="text" name="question_output5" placeholder="Type Question Output 5" value="${current_question ? current_question.output5 : ""}" onchange="change_question_field('output5', this.value)" />
+                </div>
+                </div>
+                
+                <div class="test-block">
+                <div class="input">
+                    <label for="question_input6">Input 6</label>
+                    <input type="text" name="question_input6" placeholder="Type Question Input 6" value="${current_question ? current_question.input6 : ""}" onchange="change_question_field('input6', this.value)" />
+                </div>
+                <div class="input">
+                    <label for="question_output6">Output 6</label>
+                    <input type="text" name="question_output6" placeholder="Type Question Output 6" value="${current_question ? current_question.output6 : ""}" onchange="change_question_field('output6', this.value)" />
+                </div>
+                </div>
+                </div>
 
                 <div class="form-buttons">
-                    <button class="button" onclick='save_question()'>Save Question</button>
-                    <button class="button" onclick='go_back()'>Cancel</button>
+                    <button class="new-button btn-action" onclick='save_question()'>Save Question</button>
+                    <button class="new-button btn-action" onclick='go_back()'>Cancel</button>
                 </div>
             </div>
     `;
@@ -472,6 +555,30 @@ function get_submitted_questions() {
         `;
     }
 
+    return result;
+}
+
+function get_topics() {
+    var result = `<option value="0">None</option>`;
+    for (var i = 0; i < topics.length; i++) {
+        result += `<option value="${topics[i].id}">${topics[i].name}</option>`
+    }
+    return result;
+}
+
+function get_difficulties() {
+    var result = `<option value="0">None</option>`;
+    for (var i = 0; i < difficulties.length; i++) {
+        result += `<option value="${difficulties[i].id}">${difficulties[i].name}</option>`
+    }
+    return result;
+}
+
+function get_constraints() {
+    var result = `<option value="0">None</option>`;
+    for (var i = 0; i < constraints.length; i++) {
+        result += `<option value="${constraints[i].id}">${constraints[i].name}</option>`
+    }
     return result;
 }
 
@@ -623,7 +730,7 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             var data = { token: sessionStorage.getItem("token") };
 
             const http = new XMLHttpRequest();
-            const url = pre_url + 'api/get_user.php';
+            var url = pre_url + 'api/get_user.php';
 
             http.open("POST", url, true);
             http.setRequestHeader("Content-type", "application/json");
@@ -634,8 +741,44 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                     var result = JSON.parse(http.responseText);
                     current_user = result;
 
-                    toggle_loading(false);
-                    container.innerHTML = home_view();
+                    url = pre_url + 'api/get_topics.php';
+                    http.open("POST", url, true);
+                    http.setRequestHeader("Content-type", "application/json");
+                    http.send(JSON.stringify(data));
+
+                    http.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var result = JSON.parse(http.responseText);
+                            topics = result;
+
+                            url = pre_url + 'api/get_difficulties.php';
+                            http.open("POST", url, true);
+                            http.setRequestHeader("Content-type", "application/json");
+                            http.send(JSON.stringify(data));
+
+                            http.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    var result = JSON.parse(http.responseText);
+                                    difficulties = result;
+
+                                    url = pre_url + 'api/get_constraints.php';
+                                    http.open("POST", url, true);
+                                    http.setRequestHeader("Content-type", "application/json");
+                                    http.send(JSON.stringify(data));
+
+                                    http.onreadystatechange = function () {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            var result = JSON.parse(http.responseText);
+                                            constraints = result;
+
+                                            toggle_loading(false);
+                                            container.innerHTML = home_view();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
