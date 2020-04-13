@@ -207,7 +207,7 @@ a {
     justify-content: center;
     cursor: pointer;
     background-color: white;
-    border: 1px solid rgb(255, 172, 51);
+    border: 1px solid rgb(193, 193, 193);
     border-radius: 5px;
     padding: 8px 17px;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, .2), 0 0 0 0 rgba(0, 0, 0, .14), 0 0 0 0 rgba(0, 0, 0, .12);
@@ -216,11 +216,11 @@ a {
 }
 
 .btn-nav {
-    /*border: 1px solid rgb(92, 145, 59);*/
+    border: 1px solid rgb(193, 193, 193);
 }
 
 .btn-action {
-    border: 1px solid rgb(255, 172, 51);
+    border: 1px solid rgb(193, 193, 193);
 }
 
 .tests-container, .general-container {

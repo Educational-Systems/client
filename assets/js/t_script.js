@@ -359,8 +359,41 @@ function get_questions_selector() {
                 <label><b>${temp_question.name}</b></label>
                 <p>${temp_question.description}</p>
                 
-                <div class="input">
-                    <input type="number" step="1" placeholder="Total Points" onchange="change_points(this.value, ${temp_question.ID})" ${!is_applied ? "style='display: none;'" : ""} value="${temp_status ? temp_status.points : ""}" required />
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Function Name Points</label>
+                    <input type="number" step="1" placeholder="For function name" onchange="change_points(this.value, ${temp_question.ID}, 'function_name_points')" value="${temp_status ? temp_status.function_name_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Constraint Points</label>
+                    <input type="number" step="1" placeholder="For constraint" onchange="change_points(this.value, ${temp_question.ID}, 'constraint_points')" value="${temp_status ? temp_status.constraint_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Colon Points</label>
+                    <input type="number" step="1" placeholder="For colon" onchange="change_points(this.value, ${temp_question.ID}, 'colon_points')" value="${temp_status ? temp_status.colon_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Test 1 Points</label>
+                    <input type="number" step="1" placeholder="For Test 1" onchange="change_points(this.value, ${temp_question.ID}, 'output1_points')" value="${temp_status ? temp_status.output1_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Test 2 Points</label>
+                    <input type="number" step="1" placeholder="For Test 2" onchange="change_points(this.value, ${temp_question.ID}, 'output2_points')" value="${temp_status ? temp_status.output2_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Test 3 Points</label>
+                    <input type="number" step="1" placeholder="For Test 3" onchange="change_points(this.value, ${temp_question.ID}, 'output3_points')" value="${temp_status ? temp_status.output3_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Test 4 Points</label>
+                    <input type="number" step="1" placeholder="For Test 4" onchange="change_points(this.value, ${temp_question.ID}, 'output4_points')" value="${temp_status ? temp_status.output4_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Test 5 Points</label>
+                    <input type="number" step="1" placeholder="For Test 5" onchange="change_points(this.value, ${temp_question.ID}, 'output5_points')" value="${temp_status ? temp_status.output5_points : ""}" />
+                </div>
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Test 6 Points</label>
+                    <input type="number" step="1" placeholder="For Test 6" onchange="change_points(this.value, ${temp_question.ID}, 'output6_points')" value="${temp_status ? temp_status.output6_points : ""}" />
                 </div>
             </div>
         `;
@@ -609,7 +642,15 @@ function add_question(value, ID) {
     if (value) {
         current_exam.questions.push({
             questionID: ID,
-            points: 0
+            function_name_points: 0,
+            constraint_points: 0,
+            colon_points: 0,
+            output1_points: 0,
+            output2_points: 0,
+            output3_points: 0,
+            output4_points: 0,
+            output5_points: 0,
+            output6_points: 0
         });
     } else {
         for (var i = 0; i < current_exam.questions.length; i++) {
@@ -623,10 +664,10 @@ function add_question(value, ID) {
     document.getElementById("questions_list").innerHTML = get_questions_selector();
 }
 
-function change_points(value, ID) {
+function change_points(value, ID, field) {
     for (var i = 0; i < current_exam.questions.length; i++) {
         if (current_exam.questions[i].questionID == ID) {
-            current_exam.questions[i].points = Number(value);
+            current_exam.questions[i][field] = Number(value);
             break;
         }
     }
