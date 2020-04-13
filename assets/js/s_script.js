@@ -134,7 +134,7 @@ function get_submitted_questions() {
                     </div>
 
                     <h4 style="${current_submission.status == 0 ? "display: none;" : ""}">Solution:</h4>
-                    <p style="${current_submission.status == 0 ? "display: none;" : ""}">${temp_question ? temp_question.solution : ""}</p>
+                    <textarea readonly style="${current_submission.status == 0 ? "display: none; width: 100%;" : "width: 100%;"}">${temp_question ? temp_question.solution : ""}</textarea>
 
                     <div class="results" style="${current_submission.status == 0 ? "display: none;" : ""}">
                         <div class="points-container">
