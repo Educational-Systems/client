@@ -175,29 +175,10 @@ function questions_view() {
     <div>
         <div class="act-container">
             <a class="new-button btn-action" onclick='navigate("question_create")'>Create Question</a>
-            <div class="filter">
-            
-                <div class="input">
-                    <label for="difficultyID_filter">Difficulty</label>
-                    <select id="difficultyID_filter" value="${current_filter ? Number(current_filter.difficultyID) : 0}" onchange="change_filter('difficultyID', this.value, 1)">
-                        ${get_difficulties()}
-                    </select>
-                </div>
-                <div class="input">
-                    <label for="topicID_filter">Topic</label>
-                    <select id="topicID_filter" value="${current_filter ? Number(current_filter.topicID) : 0}" onchange="change_filter('topicID', this.value, 1)">
-                        ${get_topics()}
-                    </select>
-                </div>
-                <div class="input">
-                    <label for="keyword_filter">Keyword</label>
-                    <input type="text" name="keyword_filter" id="keyword_filter" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_filter('keyword', this.value, 1)" />
-                </div>
-                <a class="new-button btn-action" onclick='reset_filter(1)'>Reset</a>
-            </div>
+            ${get_filter(1)}
         </div>
-        <div class="q-container" id="questions-container">
-            ${get_questions()}
+        <div class="q-container" id="questions-container1">
+            ${get_questions(1)}
         </div>
     </div>
     `;
@@ -335,13 +316,13 @@ function get_exam_data() {
 
                 <div class="form-buttons">
                     <button class="button" onclick='save_exam()'>Save Exam</button>
-                    <button class="button" onclick='go_back()'>Cancel</button>
+                    <button class="button" onclick='navigate("exams")'>Cancel</button>
                 </div>
             </div>
     `;
 }
 
-function get_questions() {
+function get_questions(id) {
     var result = "";
     for (var i = 0; i < filtered_questions_list.length; i++) {
         result += `
@@ -350,11 +331,10 @@ function get_questions() {
                 <h4>${filtered_questions_list[i].name}</h4>
                 <p>${filtered_questions_list[i].description}</p>
             </div>
-            <div class="q-actions">
+            ${id == 1 ? `<div class="q-actions">
                 <a class="new-button" onclick='navigate("question_edit", ${i})'>Edit Question</a>
-            </div>
-        </div>
-        `;
+            </div>`: ``}
+        </div>`;
     }
     return result;
 }
@@ -536,7 +516,7 @@ function get_question_data() {
 
                 <div class="form-buttons">
                     <button class="new-button btn-action" onclick='save_question()'>Save Question</button>
-                    <button class="new-button btn-action" onclick='go_back()'>Cancel</button>
+                    <button class="new-button btn-action" onclick='navigate("questions")'>Cancel</button>
                 </div>
             </div>
     `;
@@ -700,10 +680,8 @@ function add_student(value, ID, examID) {
 
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                //var result = JSON.parse(http.responseText);
                 toggle_loading(false);
                 navigate("exam_submissions", current_exam.id);
-                //document.getElementById("submissions_container").innerHTML = get_submissions();
             }
         }
     }
@@ -723,6 +701,28 @@ function change_submission_field(field, value) {
 
 function change_question_grade_field(i, field, value) {
     current_submission.questions[i][field] = value;
+}
+
+function get_filter(id) {
+    return `<div class="filter">            
+                <div class="input">
+                    <label for="difficultyID_filter">Difficulty</label>
+                    <select id="difficultyID_filter" value="${current_filter ? Number(current_filter.difficultyID) : 0}" onchange="change_filter('difficultyID', this.value, ${id})">
+                        ${get_difficulties()}
+                    </select>
+                </div>
+                <div class="input">
+                    <label for="topicID_filter">Topic</label>
+                    <select id="topicID_filter" value="${current_filter ? Number(current_filter.topicID) : 0}" onchange="change_filter('topicID', this.value, ${id})">
+                        ${get_topics()}
+                    </select>
+                </div>
+                <div class="input">
+                    <label for="keyword_filter">Keyword</label>
+                    <input type="text" name="keyword_filter" id="keyword_filter" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_filter('keyword', this.value, ${id})" />
+                </div>
+                <a class="new-button btn-action" onclick='reset_filter(${id})'>Reset</a>
+            </div>`;
 }
 
 function change_filter(field, value, id) {
@@ -751,9 +751,7 @@ function change_filter(field, value, id) {
         }
     }
 
-    if (id == 1) {
-        document.getElementById("questions-container").innerHTML = get_questions();
-    }
+    document.getElementById("questions-container" + id).innerHTML = get_questions();
 }
 
 function reset_filter(id) {
@@ -763,10 +761,7 @@ function reset_filter(id) {
     document.getElementById("difficultyID_filter").value = current_filter.difficultyID;
     document.getElementById("topicID_filter").value = current_filter.topicID;
     document.getElementById("keyword_filter").value = current_filter.keyword;
-
-    if (id == 1) {
-        document.getElementById("questions-container").innerHTML = get_questions();
-    }
+    document.getElementById("questions-container" + id).innerHTML = get_questions();
 }
 
 function save_exam() {
@@ -976,6 +971,13 @@ function navigate(place, sup_data = null, sup_data2 = null) {
 
                     toggle_loading(false);
                     current_exam = copy(new_exam);
+                    footer_dom.style = "display: block";
+                    footer_dom.innerHTML = `
+                        ${get_filter(3)}
+                        <div class="q-container" id="questions-container3">
+                            ${get_questions(3)}
+                        </div>
+                    `;
                     container.innerHTML = exam_create_view();
                 }
             }
@@ -1003,6 +1005,13 @@ function navigate(place, sup_data = null, sup_data2 = null) {
 
                     toggle_loading(false);
                     current_exam = exams_list[sup_data];
+                    footer_dom.style = "display: block";
+                    footer_dom.innerHTML = `
+                        ${get_filter(3)}
+                        <div class="q-container" id="questions-container3">
+                            ${get_questions(3)}
+                        </div>
+                    `;
                     container.innerHTML = exam_edit_view();
                 }
             }
@@ -1013,6 +1022,12 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             current_question = null;
             current_question = copy(new_question);
             footer_dom.style = "display: block";
+            footer_dom.innerHTML = `
+                ${get_filter(2)}
+                <div class="q-container" id="questions-container2">
+                    ${get_questions(2)}
+                </div>
+            `;
             container.innerHTML = question_create_view();
             break;
         }
@@ -1021,6 +1036,12 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             current_question = null;
             current_question = questions_list[sup_data];
             footer_dom.style = "display: block";
+            footer_dom.innerHTML = `
+                ${get_filter(2)}
+                <div class="q-container" id="questions-container2">
+                    ${get_questions(2)}
+                </div>
+            `;
             container.innerHTML = question_edit_view();
             break;
         }

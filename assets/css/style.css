@@ -177,6 +177,11 @@ a {
     font-size: 18px;
 }
 
+.q-container {
+    max-height: 414px;
+    overflow-y: auto;
+}
+
 .e-block, .q-block {
     display: flex;
     justify-content: space-between;
