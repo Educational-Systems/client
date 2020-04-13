@@ -177,20 +177,20 @@ function questions_view() {
             <div class="filter">
             
                 <div class="input">
-                    <label for="difficultyID">Difficulty</label>
-                    <select id="difficultyID" value="${current_filter ? Number(current_filter.difficultyID) : 0}" onchange="change_filter('difficultyID', this.value, 1)">
+                    <label for="difficultyID_filter">Difficulty</label>
+                    <select id="difficultyID_filter" value="${current_filter ? Number(current_filter.difficultyID) : 0}" onchange="change_filter('difficultyID', this.value, 1)">
                         ${get_difficulties()}
                     </select>
                 </div>
                 <div class="input">
-                    <label for="topicID">Topic</label>
-                    <select id="topicID" value="${current_filter ? Number(current_filter.topicID) : 0}" onchange="change_filter('topicID', this.value, 1)">
+                    <label for="topicID_filter">Topic</label>
+                    <select id="topicID_filter" value="${current_filter ? Number(current_filter.topicID) : 0}" onchange="change_filter('topicID', this.value, 1)">
                         ${get_topics()}
                     </select>
                 </div>
                 <div class="input">
-                    <label for="filter_keyword">Keyword</label>
-                    <input type="text" name="filter_keyword" id="filter_keyword" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_filter('keyword', this.value, 1)" />
+                    <label for="keyword_filter">Keyword</label>
+                    <input type="text" name="keyword_filter" id="keyword_filter" placeholder="Type Keyword" value="${current_filter ? current_filter.keyword : ""}" onchange="change_filter('keyword', this.value, 1)" />
                 </div>
                 <a class="new-button btn-action" onclick='reset_filter(1)'>Reset</a>
             </div>
@@ -759,10 +759,10 @@ function reset_filter(id) {
     current_filter = copy(new_filter);
     filtered_questions_list = questions_list;
 
-    document.getElementById("difficultyID").value = current_filter.difficultyID;
-    document.getElementById("topicID").value = current_filter.topicID;
-    document.getElementById("filter_keyword").value = current_filter.keyword;
-    
+    document.getElementById("difficultyID_filter").value = current_filter.difficultyID;
+    document.getElementById("topicID_filter").value = current_filter.topicID;
+    document.getElementById("keyword_filter").value = current_filter.keyword;
+
     if (id == 1) {
         document.getElementById("questions-container").innerHTML = get_questions();
     }
