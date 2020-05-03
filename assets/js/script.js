@@ -3,6 +3,20 @@ var submit_btn = document.getElementById("submit-btn");
 var response_block = document.getElementById("response-block");
 var loading = document.getElementById("loading");
 
+
+document.getElementById('test').value = 
+`def operation(op, a, b):
+    if op == '+':
+        return a + b
+    elif op == '-':
+        return a - b
+    elif op == '*':
+        return a * b
+    elif op == '/':
+        return a / b
+    else:
+        return -1`;
+
 var pre_url = "";
 
 function toggle_loading(state) {
@@ -28,25 +42,31 @@ function toggle_response(state, data = null) {
 }
 
 function urlencode(str) {
-    str = (str + '').toString();
-    return encodeURIComponent(str)
-        .replace('!', '%21')
-        .replace('\'', '%27')
-        .replace('(', '%28')
-        .replace(')', '%29')
-        .replace('*', '%2A')
-        .replace('+', '%20');
+    var pre_str = encodeURIComponent((str + '').toString());
+    var result = pre_str;
+    for (var i = 0; i < pre_str.length; i++) {
+        result = result.replace('!', '%21')
+            .replace("'", '%27')
+            .replace('(', '%28')
+            .replace(')', '%29')
+            .replace('*', '%2A')
+            .replace('+', '%20');
+    }
+    return result;
 }
 
 function urldecode(str) {
-    str = (str + '').toString();
-    return decodeURIComponent(str)
-        .replace('%21', '!')
-        .replace('%27', '\'')
-        .replace('%28', '(')
-        .replace('%29', ')')
-        .replace('%2A', '*')
-        .replace('%20', '+');
+    var pre_str = decodeURIComponent((str + '').toString());
+    var result = pre_str;
+    for (var i = 0; i < pre_str.length; i++) {
+        result = result.replace('%21', '!')
+            .replace('%27', '\'')
+            .replace('%28', '(')
+            .replace('%29', ')')
+            .replace('%2A', '*')
+            .replace('%20', '+');
+    }
+    return result;
 }
 function middleTest() {
     var data = {};
@@ -54,7 +74,33 @@ function middleTest() {
     var encoded_solution = urlencode(solution);
     var decoded_solution = urldecode(encoded_solution);
 
-    data = { "questionID": "32", "points": "77", "function_name": "add", "function_name_points": 1, "constraint": "print", "constraint_points": 2, "colon_points": 3, "input1": "1, 2", "input2": "3, 4", "input3": "7, 8", "input4": "-1, 1", "input5": "2, 2", "input6": "0, 0", "output1": "3", "output2": "7", "output3": "15", "output4": "0", "output5": "4", "output6": "0", "output1_points": 4, "output2_points": 5, "output3_points": 6, "output4_points": 7, "output5_points": 8, "output6_points": 9 };
+    data = {
+        "questionID": "32",
+        "points": "100",
+        "function_name": "operation",
+        "function_name_points": 10,
+        "constraint": "elif",
+        "constraint_points": 20,
+        "colon_points": 10,
+        "input1": "'+', 1, 2",
+        "input2": "'-', 3, 4",
+        "input3": "'*', 7, 8",
+        "input4": "'/', -1, 1",
+        "input5": "'^', 2, 2",
+        "input6": null,
+        "output1": "3",
+        "output2": "-1",
+        "output3": "56",
+        "output4": "-1.0",
+        "output5": "-1",
+        "output6": null,
+        "output1_points": 10,
+        "output2_points": 10,
+        "output3_points": 10,
+        "output4_points": 10,
+        "output5_points": 10,
+        "output6_points": null
+    };
 
     const http = new XMLHttpRequest();
     const url = pre_url + 'api/middle_test.php?solution=' + encoded_solution;
