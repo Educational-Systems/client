@@ -4,8 +4,8 @@ var response_block = document.getElementById("response-block");
 var loading = document.getElementById("loading");
 
 
-document.getElementById('test').value = 
-`def operation(op, a, b):
+document.getElementById('test').value =
+    `def operation(op, a, b):
     if op == '+':
         return a + b
     elif op == '-':
@@ -103,7 +103,7 @@ function middleTest() {
     };
 
     const http = new XMLHttpRequest();
-    const url = pre_url + 'api/middle_test.php?solution=' + encoded_solution;
+    const url = `https://web.njit.edu/~dsk43/cs490-middle/grade_question.php?solution=` + encoded_solution;
 
     console.log(solution);
     console.log(encoded_solution);
