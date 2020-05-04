@@ -158,11 +158,11 @@ function get_submitted_questions() {
                 <div class="answer" style="width: 100%">                    
                     <div class="input textarea-input" style="${current_submission.status != 0 ? "display: none;" : ""}">
                         <label for="question_task">Solution</label>
-                        <textarea name="question_task" placeholder="Type Question Solution" onchange="change_question_solution_field(${i}, 'solution', this.value)">${temp_question ? temp_question.solution : ""}</textarea>
+                        <textarea name="question_task" placeholder="Type Question Solution" onchange="change_question_solution_field(${i}, 'solution', this.value)">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
                     </div>
 
                     <h4 style="${current_submission.status == 0 ? "display: none;" : ""}">Solution:</h4>
-                    <textarea readonly style="${current_submission.status == 0 ? "display: none; width: 100%;" : "width: 100%;"}">${temp_question ? temp_question.solution : ""}</textarea>
+                    <textarea readonly style="${current_submission.status == 0 ? "display: none; width: 100%;" : "width: 100%;"}">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
 
                     <div class="results" style="${current_submission.status == 0 ? "display: none;" : ""}">
                         <div class="points-container">
