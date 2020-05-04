@@ -99,7 +99,7 @@ function exam_submission_view() {
         ${current_submission.status == 3 ? `<table class="results-table" style="margin-top: 10px;">
             <tr>
                 <td>Exam grade:</td>
-                <th>${current_submission.grade}</th>
+                <th>${current_submission.grade} / 100 points (${current_submission.grade}%)</th>
             </tr>
             ${current_submission.comments != '' ? `<tr>
                 <td>Exam comments:</td>

@@ -10,6 +10,23 @@ def isit(a, b):
     else:
         return True
 
+def looping(a, b):
+    result = ""
+    for x in range(a, b):
+        if x % 2 == 1:
+            result += str(x) + " "
+    return result
+
+def looping(a, b):
+    result = 1
+    for x in range(0, b):
+        result = result * a
+    return result
+
+def looping(a, b):
+    return a**b
+
+
 def operation(op, a, b):
     if op == '+':
         return a + b
