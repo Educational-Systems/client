@@ -5,6 +5,34 @@ var footer_dom = document.getElementById("footer");
 
 var pre_url = "";
 
+function urlencode(str) {
+    var pre_str = encodeURIComponent((str + '').toString());
+    var result = pre_str;
+    for (var i = 0; i < pre_str.length; i++) {
+        result = result.replace('!', '%21')
+            .replace("'", '%27')
+            .replace('(', '%28')
+            .replace(')', '%29')
+            .replace('*', '%2A')
+            .replace('+', '%20');
+    }
+    return result;
+}
+
+function urldecode(str) {
+    var pre_str = decodeURIComponent((str + '').toString());
+    var result = pre_str;
+    for (var i = 0; i < pre_str.length; i++) {
+        result = result.replace('%21', '!')
+            .replace('%27', '\'')
+            .replace('%28', '(')
+            .replace('%29', ')')
+            .replace('%2A', '*')
+            .replace('%20', '+');
+    }
+    return result;
+}
+
 function c_alert(text) {
     document.getElementById("notification_text").innerText = text;
     document.getElementById("notification").style.display = "flex";
@@ -622,19 +650,60 @@ function get_submitted_questions() {
             <div class="sq-block">
 
                 <div class="answer-header">
-                    <h3>${temp_question_result.name}</h3>
-                    ${temp_question_result.description != null ? `<p style="margin-top: 5px;">${temp_question_result.description}</p>` : ""}
-                    <p style="margin-top: 5px; margin-bottom: 5px;">${temp_question_result.task}</p>
+                    <div style="display: flex;">
+                        <h3>${temp_question_result.name}</h3>
+                    </div>
+                    <p style="margin-top: 10px; margin-bottom: 10px;">${temp_question_result.task}</p>
                 </div>
 
                 <div class="answer">
                     <h4>Answer:</h4>
 
-                    ${temp_question_result.solution != "" ? `<p style="margin-top: 5px; margin-bottom: 5px;">${temp_question_result.solution}</p>` : `<p style="margin-top: 5px; margin-bottom: 5px;">No Submitted Answer`}
-                    
-                    <hr>
+                    <textarea readonly style="width: 100%; height: 100px;">${temp_question_result ? urldecode(temp_question_result.solution) : "No Submitted Answer"}</textarea>
 
-                    <div class="points-container">
+
+                    <table>
+                        <tr>
+                            <td>Task:</td>
+                            <td>Expected:</td>
+                            <td>Result:</td>
+                            <td>Points:</td>
+                        </tr>
+                        <tr>
+                            <td>Colon</td>
+                            <td>Should be included</td>
+                            <td>${temp_question_result.colon_result ? "Pass" : "Fail"}</td>
+                            <td>
+                                <div class="input" style="margin: 0px; width: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                    <input style="width: 40px;" type="text" placeholder="Type Points" value="${temp_question_result.colon_result_points}" onchange="change_question_grade_field(${i}, 'colon_result_points', this, 'colon_points')" />
+                                    <span>/ ${temp_question_result.colon_points}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Constraint</td>
+                            <td>${temp_question_result.constraint != "" ? temp_question_result.constraint : "None"}</td>
+                            <td>${temp_question_result.constraint_result ? "Pass" : "Fail"}</td>
+                            <td>
+                                <div class="input" style="margin: 0px; width: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                    <input style="width: 40px;" type="text" placeholder="Type Points" value="${temp_question_result.constraint_result_points}" onchange="change_question_grade_field(${i}, 'constraint_result_points', this, 'constraint_points')" />
+                                    <span>/ ${temp_question_result.constraint_points}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Funtion name</td>
+                            <td>${temp_question_result.function_name}</td>
+                            <td>${temp_question_result.function_name_result ? "Pass" : "Fail"}</td>
+                            <td>
+                                <div class="input" style="margin: 0px; width: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                    <input style="width: 40px;" type="text" placeholder="Type Points" value="${temp_question_result.function_name_result_points}" onchange="change_question_grade_field(${i}, 'function_name_result_points', this, 'function_name_points')" />
+                                    <span>/ ${temp_question_result.function_name_points}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <!--<div class="points-container">
                         <div class="points-block">
                         ${temp_question_result.input1 ? `<p>Input/Output 1: ${temp_question_result.input1} => ${temp_question_result.output1}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output1_points}</p>` : ""}
                         ${temp_question_result.input2 ? `<p>Input/Output 2: ${temp_question_result.input2} => ${temp_question_result.output2}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output2_points}</p>` : ""}
@@ -650,11 +719,9 @@ function get_submitted_questions() {
                         ${temp_question_result.input6 ? `<p>Input/Output 6: ${temp_question_result.input6} => ${temp_question_result.output6}</p><p style="margin-bottom: 5px;"><b>Max Points:</b> ${temp_question_result.output6_points}</p>` : ""}
                         ${temp_question_result.colon_points ? `<p style="margin-bottom: 5px;"><b>Max Colon Points:</b> ${temp_question_result.colon_points}</p>` : ""}
                         </div>
-                    </div>
+                    </div>-->
 
-                    <hr>
-
-                    <div class="points-container">
+                    <!--<div class="points-container">
                         <div class="points-block">
 
                         ${temp_question_result.input1 ? `<p>Output 1: ${temp_question_result.result1}</p>
@@ -728,9 +795,7 @@ function get_submitted_questions() {
                         ` : ""}
                         
                         </div>
-                    </div>
-
-                    <hr>
+                    </div>-->
 
                     <div class="exam-grade-container">
                         <div class="input">
@@ -865,8 +930,14 @@ function change_submission_field(field, value) {
     current_submission[field] = value;
 }
 
-function change_question_grade_field(i, field, value) {
-    current_submission.questions[i][field] = value;
+function change_question_grade_field(i, field, el, sup_field) {
+    var value = el.value;
+    if (Number(value) > current_submission.questions[i][sup_field]) {
+        current_submission.questions[i][field] = Number(current_submission.questions[i][sup_field]);
+        el.value = current_submission.questions[i][field];
+    } else {
+        current_submission.questions[i][field] = Number(value);
+    }
 }
 
 function get_filter(id) {
@@ -1004,7 +1075,7 @@ function save_question() {
                     var result = JSON.parse(http.responseText);
                     questions_list = result;
                     filtered_questions_list = questions_list;
-                    footer_dom.style = "display: block";
+                    footer_dom.style.display = "block";
                     footer_dom.innerHTML = `
                         <a class="new-button btn-action" style="margin-bottom: 20px;" onclick='navigate("question_create")'>Create Question</a>
                         ${get_filter(2)}
@@ -1333,12 +1404,12 @@ function navigate(place, sup_data = null, sup_data2 = null) {
                             }
 
                             footer_dom.style = "display: block";
-                            footer_dom.innerHTML = `
+                            container.innerHTML = `
                             <div id="submissions_container" class="s-container">
                                 ${get_submissions()}
                             </div>`;
 
-                            container.innerHTML = exam_submissions_view();
+                            footer_dom.innerHTML = exam_submissions_view();
                         }
                     }
                 }
