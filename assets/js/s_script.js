@@ -201,7 +201,9 @@ function save_submission() {
     console.log(current_submission);
     var data = { ...current_submission, token: sessionStorage.getItem("token") };
 
-    data.solution = urlencode(solution);
+    for (var i = 0; i < data.questions.length; i++) {
+        data.questions[i].solution = urlencode(data.questions[i].solution);
+    }
 
     const http = new XMLHttpRequest();
     var url = pre_url + 'api/save_student_submission.php';
