@@ -320,7 +320,7 @@ function get_questions(id) {
     var priority = "";
     var non_priority = "";
 
-    for (var i = 0; i < filtered_questions_list.length; i++) {
+    for (var i = filtered_questions_list.length - 1; i >= 0; i--) {
         var temp_question = filtered_questions_list[i];
         var temp_status = id == 3 ? get_question_status(temp_question.ID) : null;
         var is_applied = temp_status ? true : false;
@@ -378,7 +378,7 @@ function get_questions(id) {
                     <p>${filtered_questions_list[i].description}</p>
                 </div>
 
-                ${id == 1 ? `
+                ${id == 1 || id == 2 ? `
 
                 <div class="q-actions">
                     <a class="new-button" onclick='navigate("question_edit", ${i})'>Edit Question</a>
@@ -395,7 +395,7 @@ function get_questions(id) {
                 `: ``}
             </div>
 
-            ${id == 3 && is_applied ? innerResult : ``}
+            <!--${id == 3 && is_applied ? innerResult : ``}-->
             
         </div>`;
 
@@ -753,8 +753,16 @@ function get_constraints(isFilter = false) {
 
 function add_question(value, ID) {
     if (value) {
+        for (var i = 0; i < current_exam.questions.length; i++) {
+            if (current_exam.questions[i].questionID == ID) {
+                current_exam.questions.splice(i, 1);
+                break;
+            }
+        }
+
         current_exam.questions.push({
             questionID: ID,
+            points: 0,
             function_name_points: 0,
             constraint_points: 0,
             colon_points: 0,
@@ -884,7 +892,13 @@ function reset_filter(id) {
 }
 
 function save_exam() {
+    toggle_loading(true);
     var data = { ...current_exam, token: sessionStorage.getItem("token") };
+
+    for (var i = 0; i < data.questions.length; i++) {
+        var temp_question = data.questions[i];
+        data.questions[i].points = temp_question.constraint_points + temp_question.colon_points + temp_question.function_name_points + temp_question.output1_points + temp_question.output2_points + temp_question.output3_points + temp_question.output4_points + temp_question.output5_points + temp_question.output6_points;
+    }
 
     const http = new XMLHttpRequest();
     const url = pre_url + 'api/save_exam.php';
@@ -902,10 +916,11 @@ function save_exam() {
 }
 
 function save_question() {
+    toggle_loading(true);
     var data = { ...current_question, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
-    const url = pre_url + 'api/save_question.php';
+    var url = pre_url + 'api/save_question.php';
 
     http.open("POST", url, true);
     http.setRequestHeader("Content-type", "application/json");
@@ -913,13 +928,42 @@ function save_question() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            toggle_loading(false);
-            navigate("questions");
+            data = { token: sessionStorage.getItem("token") };
+            url = pre_url + 'api/get_questions.php';
+
+            http.open("POST", url, true);
+            http.setRequestHeader("Content-type", "application/json");
+            http.send(JSON.stringify(data));
+
+            http.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var result = JSON.parse(http.responseText);
+                    questions_list = result;
+                    filtered_questions_list = questions_list;
+                    footer_dom.style = "display: block";
+                    footer_dom.innerHTML = `
+                        <a class="new-button btn-action" style="margin-bottom: 20px;" onclick='navigate("question_create")'>Create Question</a>
+                        ${get_filter(2)}
+                        <div class="q-container" id="questions-container2">
+                            ${get_questions(2)}
+                        </div>
+                    `;
+                    container.innerHTML = question_edit_view();
+
+                    document.getElementById("difficultyID_filter").value = current_filter.difficultyID;
+                    document.getElementById("topicID_filter").value = current_filter.topicID;
+                    document.getElementById("keyword_filter").value = current_filter.keyword;
+
+                    title_dom.innerText = "Edit question";
+                    toggle_loading(false);
+                }
+            }
         }
     }
 }
 
 function save_submission() {
+    toggle_loading(true);
     var data = { ...current_submission, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
@@ -1143,26 +1187,36 @@ function navigate(place, sup_data = null, sup_data2 = null) {
             current_question = copy(new_question);
             footer_dom.style = "display: block";
             footer_dom.innerHTML = `
+            <a class="new-button btn-action" style="margin-bottom: 20px;" onclick='navigate("question_create")'>Create Question</a>
                 ${get_filter(2)}
                 <div class="q-container" id="questions-container2">
                     ${get_questions(2)}
                 </div>
             `;
             container.innerHTML = question_create_view();
+
+            document.getElementById("difficultyID_filter").value = current_filter.difficultyID;
+            document.getElementById("topicID_filter").value = current_filter.topicID;
+            document.getElementById("keyword_filter").value = current_filter.keyword;
             break;
         }
         case "question_edit": {
             title = "Edit Question";
             current_question = null;
-            current_question = questions_list[sup_data];
+            current_question = filtered_questions_list[sup_data];
             footer_dom.style = "display: block";
             footer_dom.innerHTML = `
+                <a class="new-button btn-action" style="margin-bottom: 20px;" onclick='navigate("question_create")'>Create Question</a>
                 ${get_filter(2)}
                 <div class="q-container" id="questions-container2">
                     ${get_questions(2)}
                 </div>
             `;
             container.innerHTML = question_edit_view();
+
+            document.getElementById("difficultyID_filter").value = current_filter.difficultyID;
+            document.getElementById("topicID_filter").value = current_filter.topicID;
+            document.getElementById("keyword_filter").value = current_filter.keyword;
             break;
         }
         case "exam_submissions": {
