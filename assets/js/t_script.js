@@ -278,7 +278,7 @@ function exam_submission_view() {
     </div>`;
 
     var total_pts = 0;
-    if (!current_submission.total_grade) {
+    if (!Number(current_submission.total_grade)) {
         for (var i = 0; i < current_submission.questions.length; i++) {
             total_pts += get_points(current_submission.questions[i])[0];
         }
@@ -286,7 +286,7 @@ function exam_submission_view() {
     }
 
     var pts = 0;
-    if (!current_submission.grade) {
+    if (!Number(current_submission.grade)) {
         for (var i = 0; i < current_submission.questions.length; i++) {
             pts += current_submission.questions[i].grade;
         }
@@ -684,11 +684,11 @@ function get_submitted_questions() {
 
         var points = get_points(current_submission.questions[i]);
 
-        if (!current_submission.questions[i].points) {
+        if (!Number(current_submission.questions[i].points)) {
             current_submission.questions[i].points = points[0];
         }
 
-        if (!current_submission.questions[i].grade) {
+        if (!Number(current_submission.questions[i].grade)) {
             current_submission.questions[i].grade = points[1];
         }
 
@@ -719,7 +719,7 @@ function get_submitted_questions() {
                         <tr>
                             <td>Colon</td>
                             <td>Should be included</td>
-                            <td>${temp_question_result.colon_result ? "Pass" : "Fail"}</td>
+                            <td>${temp_question_result.colon_result == "true" ? "Pass" : "Fail"}</td>
                             <td>
                                 <div class="input" style="margin: 0px; width: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
                                     <input style="width: 40px;" type="text" placeholder="Type Points" value="${temp_question_result.colon_result_points}" onchange="change_question_grade_field(${i}, 'colon_result_points', this, 'colon_points')" />
@@ -730,7 +730,7 @@ function get_submitted_questions() {
                         <tr>
                             <td>Constraint</td>
                             <td>${temp_question_result.constraint != "" ? temp_question_result.constraint : "None"}</td>
-                            <td>${temp_question_result.constraint_result ? "Pass" : "Fail"}</td>
+                            <td>${temp_question_result.constraint_result == "true" ? "Pass" : "Fail"}</td>
                             <td>
                                 <div class="input" style="margin: 0px; width: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
                                     <input style="width: 40px;" type="text" placeholder="Type Points" value="${temp_question_result.constraint_result_points}" onchange="change_question_grade_field(${i}, 'constraint_result_points', this, 'constraint_points')" />
@@ -741,7 +741,7 @@ function get_submitted_questions() {
                         <tr>
                             <td>Funtion name</td>
                             <td>${temp_question_result.function_name}</td>
-                            <td>${temp_question_result.function_name_result ? "Pass" : "Fail"}</td>
+                            <td>${temp_question_result.function_name_result == "true" ? "Pass" : "Fail"}</td>
                             <td>
                                 <div class="input" style="margin: 0px; width: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
                                     <input style="width: 40px;" type="text" placeholder="Type Points" value="${temp_question_result.function_name_result_points}" onchange="change_question_grade_field(${i}, 'function_name_result_points', this, 'function_name_points')" />
