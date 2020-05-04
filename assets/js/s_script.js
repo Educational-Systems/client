@@ -2,6 +2,34 @@ var loading = document.getElementById("loading");
 var container = document.getElementById("container");
 var title_dom = document.getElementById("title");
 
+function urlencode(str) {
+    var pre_str = encodeURIComponent((str + '').toString());
+    var result = pre_str;
+    for (var i = 0; i < pre_str.length; i++) {
+        result = result.replace('!', '%21')
+            .replace("'", '%27')
+            .replace('(', '%28')
+            .replace(')', '%29')
+            .replace('*', '%2A')
+            .replace('+', '%20');
+    }
+    return result;
+}
+
+function urldecode(str) {
+    var pre_str = decodeURIComponent((str + '').toString());
+    var result = pre_str;
+    for (var i = 0; i < pre_str.length; i++) {
+        result = result.replace('%21', '!')
+            .replace('%27', '\'')
+            .replace('%28', '(')
+            .replace('%29', ')')
+            .replace('%2A', '*')
+            .replace('%20', '+');
+    }
+    return result;
+}
+
 var pre_url = "";
 
 function toggle_loading(state) {
@@ -173,6 +201,8 @@ function save_submission() {
     console.log(current_submission);
     var data = { ...current_submission, token: sessionStorage.getItem("token") };
 
+    data.solution = urlencode(solution);
+
     const http = new XMLHttpRequest();
     var url = pre_url + 'api/save_student_submission.php';
 
@@ -182,8 +212,6 @@ function save_submission() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            //var result = JSON.parse(http.responseText);
-            //console.log(result);
             toggle_loading(false);
             navigate("home");
         }

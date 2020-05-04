@@ -68,6 +68,7 @@ function urldecode(str) {
     }
     return result;
 }
+
 function middleTest() {
     var data = {};
     var solution = document.getElementById('test').value;
