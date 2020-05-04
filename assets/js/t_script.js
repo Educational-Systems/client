@@ -310,6 +310,7 @@ function exam_submission_view() {
 
         <div class="form-buttons">
             <button class="button" onclick='save_submission()'>Grade Exam</button>
+            <button class="button" onclick='release_exam()'>Release</button>
             <button class="button" onclick='navigate("exams")'>Cancel</button>
         </div>
     </div>
@@ -621,8 +622,8 @@ function get_submissions() {
         result += `
             <div class="s-block">
                 <div class="s-header">
-                    <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
-                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final</p>
+                    <h4>${current_submissions[i].studentName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : (current_submissions[i].status == 2) ? "Graded" : "Released"}</h4>
+                    <p>Grade: ${current_submissions[i].grade}</p>
                     <p>${current_submissions[i].comments}</p>
                 </div>
                 <div class="s-actions">
@@ -1127,6 +1128,26 @@ function save_submission() {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             c_alert("Exam successfully graded!");
+            toggle_loading(false);
+            navigate("exams");
+        }
+    }
+}
+
+function release_exam() {
+    toggle_loading(true);
+    var data = { examID: current_submission.examID, token: sessionStorage.getItem("token") };
+
+    const http = new XMLHttpRequest();
+    const url = pre_url + 'api/release_submission.php';
+
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/json");
+    http.send(JSON.stringify(data));
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            c_alert("Exam successfully released!");
             toggle_loading(false);
             navigate("exams");
         }
