@@ -3,20 +3,6 @@ var submit_btn = document.getElementById("submit-btn");
 var response_block = document.getElementById("response-block");
 var loading = document.getElementById("loading");
 
-
-document.getElementById('test').value =
-    `def operation(op, a, b):
-    if op == '+':
-        return a + b
-    elif op == '-':
-        return a - b
-    elif op == '*':
-        return a * b
-    elif op == '/':
-        return a / b
-    else:
-        return -1`;
-
 var pre_url = "";
 
 function toggle_loading(state) {

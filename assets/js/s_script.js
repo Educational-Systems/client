@@ -93,10 +93,19 @@ function exam_submission_view() {
         <h2>Exam Submission:</h2>
         <div>
             <h3 style="margin: 10px 0px;">${current_submission.examName}</h3>
-            <h4>Auto-Grader: ${current_submission.autoGrade}</h4>
-            <h4>Grade: ${current_submission.grade}</h4>
-            <p style="margin: 10px 0px;">${current_submission.examDescription}</p>
+            <p style="margin: 10px 0px; margin-top: -5px;">${current_submission.examDescription}</p>
         </div>
+
+        ${current_submission.status == 2 ? `<table class="results-table" style="margin-top: 10px;">
+            <tr>
+                <td>Exam grade:</td>
+                <th>${current_submission.grade}</th>
+            </tr>
+            ${current_submission.comments != '' ? `<tr>
+                <td>Exam comments:</td>
+                <th>${current_submission.comments}</th>
+            </tr>`: ``}
+        </table>`: ``}
 
         <div class="submission-container">
             ${get_submitted_questions()}
@@ -117,12 +126,12 @@ function get_submissions() {
         result += `
             <div class="s-block">
                 <div class="s-header">
-                    <h4>${current_submissions[i].examName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1) ? "Submitted" : "Graded"}</h4>
-                    <p>${current_submissions[i].autoGrade} auto; ${current_submissions[i].grade} final</p>
-                    <p>${current_submissions[i].comments}</p>
+                    <h4>${current_submissions[i].examName} | ${current_submissions[i].status == 0 ? "New" : (current_submissions[i].status == 1 || current_submissions[i].status == 2) ? "Submitted" : "Graded"}</h4>
+                    <p>${current_submissions[i].examDescription}</p>
+                    ${current_submissions[i].status == 3 ? `<p>Grade: ${current_submissions[i].grade}</p>` : ``}
                 </div>
                 <div class="s-actions">
-                    <a class="new-button" onclick='navigate("exam_submission", ${i})'>${current_submissions[i].status == 0 ? "Take Exam" : (current_submissions[i].status == 1) ? "View Submission" : "View Grade"}</a>
+                    <a class="new-button" onclick='navigate("exam_submission", ${i})'>${current_submissions[i].status == 0 ? "Take Exam" : (current_submissions[i].status == 1 || current_submissions[i].status == 2) ? "View Submission" : "View Grade"}</a>
                 </div>
             </div>
         `;
@@ -131,68 +140,126 @@ function get_submissions() {
     return result;
 }
 
+function get_temp_questions(temp_question_result, j) {
+    var result = ``;
+
+    for (var i = 1; i <= 6; i++) {
+        if (temp_question_result['input' + i]) {
+            result += `
+                        <tr>
+                            <td>Test case ${i}</td>
+                            <td>In: ${temp_question_result["input" + i]} Out: ${temp_question_result["output" + i]}</td>
+                            <td>${temp_question_result["result" + i] ? temp_question_result["result" + i] : "No result"}</td>
+                            <td>
+                                <span>${temp_question_result["result" + i + "_points"]} / ${temp_question_result["output" + i + "_points"]}</span>
+                            </td>
+                        </tr>
+                        `;
+        }
+    }
+
+    return result;
+}
+
+function get_points(temp_q) {
+    var total_t_points = Number(temp_q.colon_points) + Number(temp_q.constraint_points) + Number(temp_q.function_name_points);
+
+    for (var j = 1; j <= 6; j++) {
+        if (temp_q["input" + j]) {
+            total_t_points += Number(temp_q["output" + j + "_points"]);
+        }
+    }
+
+    var total_r_points = Number(temp_q.colon_result_points) + Number(temp_q.constraint_result_points) + Number(temp_q.function_name_result_points);
+
+    for (var j = 1; j <= 6; j++) {
+        if (temp_q["input" + j]) {
+            total_r_points += Number(temp_q["result" + j + "_points"]);
+        }
+    }
+
+    return [total_t_points, total_r_points];
+}
+
 function get_submitted_questions() {
     var result = "";
 
     for (var i = 0; i < current_submission.questions.length; i++) {
+        var points = get_points(current_submission.questions[i]);
+
+        if (!Number(current_submission.questions[i].points)) {
+            current_submission.questions[i].points = points[0];
+        }
+
         var temp_question = current_submission.questions[i];
         result += `
             <div class="s-block" style="flex-direction: column; align-items: flex-start;">
                 <div class="answer-header">
-                    <h3>${temp_question.name}</h3>
-
-                    ${temp_question.description != null ? `<h4 style="margin: 10px 0px;">${temp_question.description}</h4>` : ""}
-
+                    <h3>${temp_question.name} | ${current_submission.status != 2 ? `${temp_question.points} max points` : `${temp_question.grade} points`}</h3>
                     <p style="margin-top: 5px; margin-bottom: 5px;">${temp_question.task}</p>
 
                     <div class="points-container">
                         <div class="points-block">
-                        ${temp_question.input1 ? `<p>Input/Output 1: ${temp_question.input1} => ${temp_question.output1} <br>Points: ${temp_question.output1_points}</p>` : ""}
-                        ${temp_question.input2 ? `<p>Input/Output 2: ${temp_question.input2} => ${temp_question.output2} <br>Points: ${temp_question.output2_points}</p>` : ""}
-                        ${temp_question.function_name ? `<p>Function Name: ${temp_question.function_name} <br>Points: ${temp_question.function_name_points}</p>` : ""}
+                            ${temp_question.function_name ? `<p>Required function name: <b>${temp_question.function_name}</b></p>` : ""}
                         </div>
                         <div class="points-block">
-                        ${temp_question.input3 ? `<p>Input/Output 3: ${temp_question.input3} => ${temp_question.output3} <br>Points: ${temp_question.output3_points}</p>` : ""}
-                        ${temp_question.input4 ? `<p>Input/Output 4: ${temp_question.input4} => ${temp_question.output4} <br>Points: ${temp_question.output4_points}</p>` : ""}
-                        ${temp_question.constraint ? `<p>Constraint: ${temp_question.constraint} <br>Points: ${temp_question.constraint_points}</p>` : ""}
-                        </div>
-                        <div class="points-block">
-                        ${temp_question.input5 ? `<p>Input/Output 5: ${temp_question.input5} => ${temp_question.output5} <br>Points: ${temp_question.output5_points}</p>` : ""}
-                        ${temp_question.input6 ? `<p>Input/Output 6: ${temp_question.input6} => ${temp_question.output6} <br>Points: ${temp_question.output6_points}</p>` : ""}
-                        ${temp_question.colon_points ? `<p>Colon Points: ${temp_question.colon_points}</p>` : ""}
+                            ${temp_question.constraint ? `<p>Required constraint: <b>${temp_question.constraint}</b></p>` : ""}
                         </div>
                     </div>
                 </div>
                 <div class="answer" style="width: 100%">                    
                     <div class="input textarea-input" style="${current_submission.status != 0 ? "display: none;" : ""}">
                         <label for="question_task">Solution</label>
-                        <textarea name="question_task" placeholder="Type Question Solution" onchange="change_question_solution_field(${i}, 'solution', this.value)">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
+                        <textarea name="question_task" style="height: 100px;" placeholder="Type Question Solution" onchange="change_question_solution_field(${i}, 'solution', this.value)">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
                     </div>
 
-                    <h4 style="${current_submission.status == 0 ? "display: none;" : ""}">Solution:</h4>
-                    <textarea readonly style="${current_submission.status == 0 ? "display: none; width: 100%;" : "width: 100%;"}">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
+                    <h4 style="${current_submission.status == 0 ? "display: none;" : "margin-bottom: 5px;"}">Solution:</h4>
+                    <textarea readonly style="${current_submission.status == 0 ? "display: none; width: 100%;" : "width: 100%; height: 100px;"}">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
 
-                    <div class="results" style="${current_submission.status == 0 ? "display: none;" : ""}">
-                        <div class="points-container">
-                        <div class="points-block">
-                        ${temp_question.input1 ? `<p>Result 1: ${temp_question.result1} <br>Points: ${temp_question.result1_points}</p>` : ""}
-                        ${temp_question.input2 ? `<p>Result 2: ${temp_question.result2} <br>Points: ${temp_question.result2_points}</p>` : ""}
-                        ${temp_question.function_name ? `<p>Function Name Check: ${Boolean(temp_question.function_name_result) ? "Passed" : "Failed"} <br>Function Name Check Points: ${temp_question.function_name_result_points}</p>` : ""}
-                        </div>
-                        <div class="points-block">
-                        ${temp_question.input3 ? `<p>Result 3: ${temp_question.result3} <br>Points: ${temp_question.result3_points}</p>` : ""}
-                        ${temp_question.input4 ? `<p>Result 4: ${temp_question.result4} <br>Points: ${temp_question.result4_points}</p>` : ""}
-                        ${temp_question.constraint ? `<p>Constraint Check: ${Boolean(temp_question.constraint_result) ? "Passed" : "Failed"} <br>Constraint Check Points: ${temp_question.constraint_result_points}</p>` : ""}
-                        </div>
-                        <div class="points-block">
-                        ${temp_question.input5 ? `<p>Result 5: ${temp_question.result5} <br>Points: ${temp_question.result5_points}</p>` : ""}
-                        ${temp_question.input6 ? `<p>Result 6: ${temp_question.result6} <br>Points: ${temp_question.result6_points}</p>` : ""}
-                        ${temp_question.colon_points ? `<p>Colon Check: ${Boolean(temp_question.colon_result) ? "Passed" : "Failed"} <br>Colon Check Points: ${temp_question.colon_result_points}</p>` : ""}
-                        </div>
-                    </div>
-                        <p>Auto-Grader: ${temp_question.autoGrade}</p>
-                        <p>Final Grade: ${temp_question.grade}</p>
-                    </div>
+                    ${Number(current_submission.status) == 2 ? `<table class="results-table" style="margin-top: 10px;">
+                        <tr>
+                            <th>Task:</th>
+                            <th>Expected:</th>
+                            <th>Result:</th>
+                            <th>Points:</th>
+                        </tr>
+                        <tr>
+                            <td>Colon</td>
+                            <td>Should be included</td>
+                            <td>${temp_question.colon_result == "true" ? "Pass" : "Fail"}</td>
+                            <td>
+                                <span>${temp_question.colon_result_points} / ${temp_question.colon_points}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Constraint</td>
+                            <td>${temp_question.constraint != "" ? temp_question.constraint : "None"}</td>
+                            <td>${temp_question.constraint_result == "true" ? "Pass" : "Fail"}</td>
+                            <td>
+                                <span>${temp_question.constraint_result_points} / ${temp_question.constraint_points}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Funtion name</td>
+                            <td>${temp_question.function_name}</td>
+                            <td>${temp_question.function_name_result == "true" ? "Pass" : "Fail"}</td>
+                            <td>
+                                <span>${temp_question.function_name_result_points} / ${temp_question.function_name_points}</span>
+                            </td>
+                        </tr>
+
+                        ${get_temp_questions(temp_question, i)}
+
+                        <tr>
+                            <td>Total</td>
+                            <td colspan="2">
+                                <span>Comments: ${temp_question ? temp_question.comments : ""}</span>
+                            </td>
+                            <td>
+                                <span>${temp_question.grade} / ${temp_question.points}</span>
+                            </td>
+                        </tr>
+                    </table>` : ``}
                 </div>
             </div>
         `;
@@ -223,6 +290,7 @@ function save_submission() {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             toggle_loading(false);
+            c_alert("Exam successfully submitted!");
             navigate("home");
         }
     }

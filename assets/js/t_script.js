@@ -33,11 +33,15 @@ function urldecode(str) {
     return result;
 }
 
-function c_alert(text) {
+function c_alert(text, color = null) {
     document.getElementById("notification_text").innerText = text;
     document.getElementById("notification").style.display = "flex";
+    if (color != null) {
+        document.getElementById("notification-block").style.backgroundColor = color;
+    }
     setTimeout(function () {
         document.getElementById("notification").style.display = "none";
+        document.getElementById("notification-block").style.backgroundColor = "#5c913b";
     }, 3000);
 }
 
@@ -354,10 +358,10 @@ function get_exam_data() {
                         <div class="input">
                             <label for="exam_name">Name</label>
                             <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
-                        </div>
-                        <div class="input">
-                            <label for="exam_description">Description</label>
-                            <input type="text" name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
+                        </div>                        
+                        <div class="input textarea-input">
+                            <label for="exam_description">Description:</label>
+                            <textarea name="exam_description" placeholder="Type Exam Description" onchange="change_exam_field('description', this.value)">${current_exam ? current_exam.description : ""}</textarea>
                         </div>
                     </div>
                 </div>
@@ -365,6 +369,9 @@ function get_exam_data() {
                     ${get_questions(4)}
                 </div>
 
+                <div class="points-state" style="margin-bottom: 20px;">
+                    <span id="points-state">100 / 100 assigned</span>
+                </div>
                 <div class="form-buttons">
                     <button class="button" onclick='save_exam()'>Save Exam</button>
                     <button class="button" onclick='navigate("exams")'>Cancel</button>
@@ -382,51 +389,6 @@ function get_questions(id) {
         var temp_question = filtered_questions_list[i];
         var temp_status = (id == 3 || id == 4) ? get_question_status(temp_question.ID) : null;
         var is_applied = temp_status ? true : false;
-        var innerResult = ``;
-
-        if (id == 3) {
-            innerResult = `
-                <h4 style="margin-top: 10px; margin-left: 2px; margin-bottom: 5px;">Points per requirement:</h4>
-                <div class="q-selection">                
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Function Name</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'function_name_points')" value="${temp_status ? temp_status.function_name_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Constraint</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'constraint_points')" value="${temp_status ? temp_status.constraint_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Colon</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'colon_points')" value="${temp_status ? temp_status.colon_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Test 1</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output1_points')" value="${temp_status ? temp_status.output1_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Test 2</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output2_points')" value="${temp_status ? temp_status.output2_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Test 3</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output3_points')" value="${temp_status ? temp_status.output3_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Test 4</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output4_points')" value="${temp_status ? temp_status.output4_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Test 5</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output5_points')" value="${temp_status ? temp_status.output5_points : ""}" />
-                    </div>
-                    <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
-                        <label>Test 6</label>
-                        <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'output6_points')" value="${temp_status ? temp_status.output6_points : ""}" />
-                    </div>
-                </div>`;
-        }
-
         var temp_result_data = `
         <div class="q-block">
 
@@ -462,7 +424,7 @@ function get_questions(id) {
             </div>
 
             ${id == 4 && is_applied ? `
-            <div class="q-selection">                
+            <div class="q-selection" style="margin-top: 10px;">                
                 <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
                     <label>Points:</label>
                     <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'points')" value="${temp_status ? temp_status.points : ""}" />
@@ -627,7 +589,7 @@ function get_submissions() {
                     <p>${current_submissions[i].comments}</p>
                 </div>
                 <div class="s-actions">
-                    <a class="new-button" onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
+                    <a class="new-button" style="margin-left: 50px;" onclick='navigate("exam_submission", ${i})'>Grade Submission</a>
                 </div>
             </div>
         `;
@@ -877,6 +839,20 @@ function change_points(value, ID, field) {
             break;
         }
     }
+
+    var assigned_points = 0;
+    for (var i = 0; i < current_exam.questions.length; i++) {
+        assigned_points += Number(current_exam.questions[i].points);
+    }
+
+
+    if (assigned_points < 100 || assigned_points > 100) {
+        document.getElementById("points-state").style.color = "red";
+        document.getElementById("points-state").innerText = `${assigned_points} / 100 assigned (${100 - assigned_points})`;
+    } else {
+        document.getElementById("points-state").style.color = "black";
+        document.getElementById("points-state").innerText = `${assigned_points} / 100 assigned`;
+    }
 }
 
 function add_student(value, ID, examID) {
@@ -1018,6 +994,18 @@ function reset_filter(id) {
 }
 
 function save_exam() {
+    var assigned_points = 0;
+    for (var i = 0; i < current_exam.questions.length; i++) {
+        assigned_points += Number(current_exam.questions[i].points);
+    }
+
+    current_exam.points = assigned_points;
+    
+    if (current_exam.points != 100) {
+        c_alert("Please, assign points for 100 total!", "red");
+        return;
+    }
+
     toggle_loading(true);
     var data = { ...current_exam, token: sessionStorage.getItem("token") };
 
