@@ -5,6 +5,14 @@ var footer_dom = document.getElementById("footer");
 
 var pre_url = "";
 
+function c_alert(text) {
+    document.getElementById("notification_text").innerText = text;
+    document.getElementById("notification").style.display = "flex";
+    setTimeout(function () {
+        document.getElementById("notification").style.display = "none";
+    }, 3000);
+}
+
 function toggle_loading(state) {
     state ? loading.style.display = "block" : loading.style.display = "none";
 }
@@ -838,6 +846,7 @@ function add_student(value, ID, examID) {
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 toggle_loading(false);
+                c_alert("Exam successfully assigned!");
                 navigate("exam_submissions", current_exam.id);
             }
         }
@@ -964,6 +973,7 @@ function save_exam() {
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             toggle_loading(false);
+            c_alert("Exam successfully saved!");
             navigate("exams");
         }
     }
@@ -1009,6 +1019,7 @@ function save_question() {
                     document.getElementById("keyword_filter").value = current_filter.keyword;
 
                     title_dom.innerText = "Edit question";
+                    c_alert("Question successfully saved!");
                     toggle_loading(false);
                 }
             }
@@ -1029,6 +1040,7 @@ function save_submission() {
 
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            c_alert("Exam successfully graded!");
             toggle_loading(false);
             navigate("exams");
         }

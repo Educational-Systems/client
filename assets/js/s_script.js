@@ -2,6 +2,14 @@ var loading = document.getElementById("loading");
 var container = document.getElementById("container");
 var title_dom = document.getElementById("title");
 
+function c_alert(text) {
+    document.getElementById("notification_text").innerText = text;
+    document.getElementById("notification").style.display = "flex";
+    setTimeout(function () {
+        document.getElementById("notification").style.display = "none";
+    }, 3000);
+}
+
 function urlencode(str) {
     var pre_str = encodeURIComponent((str + '').toString());
     var result = pre_str;
