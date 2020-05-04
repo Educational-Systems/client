@@ -82,6 +82,7 @@ function middleTest() {
         "constraint": "elif",
         "constraint_points": 20,
         "colon_points": 10,
+        "solution": encoded_solution,
         "input1": "'+', 1, 2",
         "input2": "'-', 3, 4",
         "input3": "'*', 7, 8",
@@ -103,7 +104,7 @@ function middleTest() {
     };
 
     const http = new XMLHttpRequest();
-    const url = `https://web.njit.edu/~dsk43/cs490-middle/grade_question.php?solution=` + encoded_solution;
+    const url = `https://web.njit.edu/~dsk43/cs490-middle/grade_question.php`;
 
     console.log(solution);
     console.log(encoded_solution);
