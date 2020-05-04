@@ -295,16 +295,19 @@ function get_exam_data() {
                     <h3>General Information:</h3>
                 </div>
                 <div class="general-container">
-                <div class="general-block">
-                <div class="input">
-                    <label for="exam_name">Name</label>
-                    <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
+                    <div class="general-block">
+                        <div class="input">
+                            <label for="exam_name">Name</label>
+                            <input type="text" name="exam_name" placeholder="Type Exam Name" value="${current_exam ? current_exam.name : ""}" onchange="change_exam_field('name', this.value)" />
+                        </div>
+                        <div class="input">
+                            <label for="exam_description">Description</label>
+                            <input type="text" name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
+                        </div>
+                    </div>
                 </div>
-                <div class="input">
-                    <label for="exam_description">Description</label>
-                    <input type="text" name="exam_description" placeholder="Type Exam Description" value="${current_exam ? current_exam.description : ""}" onchange="change_exam_field('description', this.value)" />
-                </div>
-                </div>
+                <div id="questions-container4" style="margin-bottom: 20px;">
+                    ${get_questions(4)}
                 </div>
 
                 <div class="form-buttons">
@@ -322,7 +325,7 @@ function get_questions(id) {
 
     for (var i = filtered_questions_list.length - 1; i >= 0; i--) {
         var temp_question = filtered_questions_list[i];
-        var temp_status = id == 3 ? get_question_status(temp_question.ID) : null;
+        var temp_status = (id == 3 || id == 4) ? get_question_status(temp_question.ID) : null;
         var is_applied = temp_status ? true : false;
         var innerResult = ``;
 
@@ -386,7 +389,15 @@ function get_questions(id) {
 
                 `: ``}
 
-                ${id == 3 ? `
+                ${id == 3 && !is_applied ? `
+
+                <div class="q-actions">
+                    <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_question(this.checked, ${temp_question.ID})">
+                </div>
+                
+                `: ``}
+
+                ${id == 4 && is_applied ? `
 
                 <div class="q-actions">
                     <input type="checkbox" ${is_applied ? "checked" : ""} onchange="add_question(this.checked, ${temp_question.ID})">
@@ -395,19 +406,30 @@ function get_questions(id) {
                 `: ``}
             </div>
 
-            <!--${id == 3 && is_applied ? innerResult : ``}-->
+            ${id == 4 && is_applied ? `
+            <div class="q-selection">                
+                <div class="input" ${!is_applied ? "style='display: none;'" : ""} >
+                    <label>Points:</label>
+                    <input type="number" step="1" placeholder="Points" onchange="change_points(this.value, ${temp_question.ID}, 'points')" value="${temp_status ? temp_status.points : ""}" />
+                </div>
+            </div>
+            ` : ``}
             
         </div>`;
 
-        if (id == 3 && is_applied) {
+        if (is_applied) {
             priority += temp_result_data;
         } else {
             non_priority += temp_result_data;
         }
     }
 
-    result += priority;
-    result += non_priority;
+    if (id == 4) {
+        result += priority;
+    }
+    if (id != 4) {
+        result += non_priority;
+    }
 
     return result;
 }
@@ -753,13 +775,6 @@ function get_constraints(isFilter = false) {
 
 function add_question(value, ID) {
     if (value) {
-        for (var i = 0; i < current_exam.questions.length; i++) {
-            if (current_exam.questions[i].questionID == ID) {
-                current_exam.questions.splice(i, 1);
-                break;
-            }
-        }
-
         current_exam.questions.push({
             questionID: ID,
             points: 0,
@@ -782,7 +797,22 @@ function add_question(value, ID) {
         }
     }
 
+    var questions_count = current_exam.questions.length;
+    var total_per_question = Math.floor(100 / questions_count);
+    var last_question_points = total_per_question + (100 - (total_per_question * questions_count));
+
+    for (var i = 0; i < current_exam.questions.length; i++) {
+        if (i != questions_count - 1) {
+            current_exam.questions[i].points = total_per_question;
+        } else {
+            current_exam.questions[i].points = last_question_points;
+        }
+    }
+
+    console.log(current_exam.questions);
+
     document.getElementById("questions-container3").innerHTML = get_questions(3);
+    document.getElementById("questions-container4").innerHTML = get_questions(4);
 }
 
 function change_points(value, ID, field) {
@@ -896,8 +926,32 @@ function save_exam() {
     var data = { ...current_exam, token: sessionStorage.getItem("token") };
 
     for (var i = 0; i < data.questions.length; i++) {
-        var temp_question = data.questions[i];
-        data.questions[i].points = temp_question.constraint_points + temp_question.colon_points + temp_question.function_name_points + temp_question.output1_points + temp_question.output2_points + temp_question.output3_points + temp_question.output4_points + temp_question.output5_points + temp_question.output6_points;
+        var temp_q = data.questions[i];
+
+        var temp_a_q = get_question_by_ID(temp_q.questionID);
+        var req_amount = 0;
+
+        for (var j = 1; j < 7; j++) {
+            if (temp_a_q['input' + j] != "") {
+                req_amount++;
+            }
+        }
+
+        var total_req_amount = req_amount + 3;
+        var total_per_req = Math.floor(temp_q.points / total_req_amount);
+        var last_req_points = total_per_req + (temp_q.points - (total_per_req * total_req_amount));
+
+        data.questions[i].colon_points = total_per_req;
+        data.questions[i].constraint_points = total_per_req;
+        data.questions[i].function_name_points = total_per_req;
+
+        for (var j = 1; j <= req_amount; j++) {
+            if (j != req_amount) {
+                data.questions[i]["output" + j + "_points"] = total_per_req;
+            } else {
+                data.questions[i]["output" + j + "_points"] = last_req_points;
+            }
+        }
     }
 
     const http = new XMLHttpRequest();
