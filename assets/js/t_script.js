@@ -1000,7 +1000,7 @@ function save_exam() {
     }
 
     current_exam.points = assigned_points;
-    
+
     if (current_exam.points != 100) {
         c_alert("Please, assign points for 100 total!", "red");
         return;
@@ -1124,7 +1124,7 @@ function save_submission() {
 
 function release_exam() {
     toggle_loading(true);
-    var data = { examID: current_submission.examID, token: sessionStorage.getItem("token") };
+    var data = { submissionID: current_submission.ID, token: sessionStorage.getItem("token") };
 
     const http = new XMLHttpRequest();
     const url = pre_url + 'api/release_submission.php';

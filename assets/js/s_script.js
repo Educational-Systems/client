@@ -96,7 +96,7 @@ function exam_submission_view() {
             <p style="margin: 10px 0px; margin-top: -5px;">${current_submission.examDescription}</p>
         </div>
 
-        ${current_submission.status == 2 ? `<table class="results-table" style="margin-top: 10px;">
+        ${current_submission.status == 3 ? `<table class="results-table" style="margin-top: 10px;">
             <tr>
                 <td>Exam grade:</td>
                 <th>${current_submission.grade}</th>
@@ -216,7 +216,7 @@ function get_submitted_questions() {
                     <h4 style="${current_submission.status == 0 ? "display: none;" : "margin-bottom: 5px;"}">Solution:</h4>
                     <textarea readonly style="${current_submission.status == 0 ? "display: none; width: 100%;" : "width: 100%; height: 100px;"}">${temp_question ? urldecode(temp_question.solution) : ""}</textarea>
 
-                    ${Number(current_submission.status) == 2 ? `<table class="results-table" style="margin-top: 10px;">
+                    ${Number(current_submission.status) == 3 ? `<table class="results-table" style="margin-top: 10px;">
                         <tr>
                             <th>Task:</th>
                             <th>Expected:</th>
